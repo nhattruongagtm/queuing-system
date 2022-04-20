@@ -1,0 +1,163 @@
+.login {
+  height: 100vh;
+  &__sidebar {
+    width: 41% !important;
+    min-width: 41% !important;
+    height: 100%;
+    background-color: #f6f6f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .logo {
+      margin: 0 auto;
+      margin-top: 82px;
+      width: 170px;
+      height: 136px;
+      margin-bottom: 75px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    .login__form {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      .input {
+        margin-bottom: 16px;
+        .label {
+          font-size: 18px;
+          font-weight: 400;
+          line-height: 27px;
+          margin-bottom: 4px;
+        }
+        input {
+          height: 40px;
+          border-radius: 8px !important;
+        }
+      }
+      .input--text {
+        input {
+          border: 2px solid $gray-outline;
+        }
+        .input__error {
+          border: 2px solid $error;
+        }
+      }
+      .ant-input-password {
+        border-radius: 8px !important;
+        border: 2px solid $gray-outline;
+        height: 40px !important;
+        input {
+          height: 100%;
+        }
+      }
+      .input__error {
+        border: 2px solid $error;
+      }
+      .login__error,
+      a {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+        color: $error;
+        cursor: pointer;
+        margin-bottom: 19px;
+        display: block;
+
+        &.login__forgot {
+          text-align: center;
+          margin-top: 8px;
+        }
+      }
+      button {
+        margin: 0 auto;
+      }
+      .button--disable {
+        background-color: $gray-text;
+        opacity: 0.4;
+      }
+      .ant-btn {
+      }
+    }
+
+    // typing email
+    .typing__email {
+      width: 400px;
+      p {
+        text-align: center;
+      }
+      &__title {
+        font-size: 22px;
+        line-height: 23px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      &__text {
+        color: #37474f;
+        font-weight: 400;
+        line-height: 27px;
+        font-size: 18px;
+        margin-bottom: 4px;
+      }
+      input {
+        margin-bottom: 48px;
+      }
+      &__actions {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        button {
+          width: 162px;
+        }
+      }
+    }
+    // change pass form
+    .change__form {
+      .change__title {
+        text-align: center;
+        margin-bottom: 12px;
+        font-size: 22px;
+        line-height: 33px;
+        font-weight: 700;
+      }
+      .btn__change{
+        margin-top: 48px;
+      }
+    }
+  }
+  &__content {
+    position: relative;
+    background-color: white;
+    img {
+      position: absolute;
+      left: 79px;
+      bottom: 83px;
+      width: 70%;
+      height: 75.8%;
+    }
+    &__text {
+      position: absolute;
+      right: 33px;
+      bottom: 37.28%;
+      span {
+        color: $orange;
+        display: block;
+      }
+      span:first-child {
+        font-size: 34px;
+        font-weight: 400;
+        line-height: 51px;
+      }
+      span:last-child {
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 54px;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

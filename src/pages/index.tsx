@@ -11,6 +11,10 @@ import Settings from "./Settings/Settings";
 import UserInfo from "./UserInfo/UserInfo";
 import Head from "../components/Header/Header";
 import Services from "./Services/Services";
+import AddDevice from "./Devices/AddDevice";
+import DeviceDetail from "./Devices/DeviceDetail";
+import AddService from "./Services/AddService";
+import ServiceDetail from "./Services/ServiceDetail";
 
 type Props = {};
 
@@ -37,6 +41,10 @@ const UtilPage = (props: Props) => {
             />
             <Route path={IRoute.REPORT} element={<Report />} />
             <Route path={IRoute.INFO} element={<UserInfo />} />
+            <Route path={IRoute.ADD_DEVICE} element={<AddDevice />} />
+            <Route path={IRoute.DEVICE_DETAIL} element={<DeviceDetail />} />
+            <Route path={IRoute.ADD_SERVICE} element={<AddService />} />
+            <Route path={IRoute.SERVICE_DETAIL} element={<ServiceDetail />} />
             <Route path="*" element={<>Not found</>} />
           </Routes>
         </div>

@@ -9,4 +9,8 @@ export enum IRoute {
   LOGIN = "/dang-nhap",
   CHANGE_PASSWORD = "/doi-mat-khau",
   INFO = "/thong-tin",
+  ADD_DEVICE = "/thiet-bi/them-thiet-bi",
+  DEVICE_DETAIL = "/thiet-bi/chi-tiet-thiet-bi",
+  ADD_SERVICE = "/dich-vu/them-dich-vu",
+  SERVICE_DETAIL = "/dich-vu/chi-tiet-dich-vu",
 }

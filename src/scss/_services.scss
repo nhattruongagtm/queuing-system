@@ -1,0 +1,220 @@
+.services {
+  .services__datepickers {
+    display: flex;
+    align-items: center;
+    input {
+      border-radius: 8px;
+    }
+    .ant-picker {
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+    .anticon-caret-right {
+      svg {
+        width: 8px;
+        margin: 0 8px;
+      }
+    }
+  }
+  table {
+    tr {
+      td {
+        padding: 14px 16px !important;
+      }
+    }
+  }
+}
+.service__inputs {
+  display: flex;
+  margin-bottom: 16px;
+  //   & > div {
+  //     height: 164px;
+  //   }
+  .service__input__left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: space-between;
+    .service__input__item {
+    }
+  }
+  .service__input__right {
+    height: 164px;
+    .service__input__item {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      input,
+      .ant-input {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+.service__principles {
+  margin-bottom: 14px;
+  &__title {
+    margin-bottom: 12px;
+  }
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    .service__principles__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      input {
+        padding: 10px 12px;
+        width: 61px;
+      }
+      input[type="checkbox"] {
+        height: 20px;
+      }
+      .check__label {
+        display: inline-block;
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+.add__service__main {
+  height: fit-content !important;
+  max-height: unset;
+}
+.add__service__actions {
+  // padding: 24px;
+}
+
+.service__detail {
+  padding-bottom: 24px;
+  .service__detail__main {
+    width: calc(29.83%) !important;
+    display: flex;
+    gap: 24px;
+    height: 100% !important;
+  }
+  .service__detail__list {
+    width: calc(57.9% + 24px) !important;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .add__service__detail {
+    height: 100% !important;
+  }
+  .service__detail__info {
+    display: flex;
+    flex-direction: column;
+  }
+  .title-t {
+    margin-top: 16px;
+  }
+  .service__detail__check {
+    display: flex;
+  }
+  .service__type__check {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .service__principles__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .ant-input {
+      width: 61px;
+    }
+  }
+}
+
+.service__content__selects {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  .service__content__item {
+    p {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 3px;
+    }
+    .services__datepickers {
+    }
+    .search__search__child {
+      p {
+      }
+      .service__search__input {
+      }
+    }
+  }
+  .select__active {
+    width: 160px;
+    .ant-select {
+      width: 100%;
+    }
+    select {
+      width: 100%;
+    }
+    .ant-select-selector {
+      height: 44px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .select__dates {
+    width: 280px;
+    .services__datepickers {
+      display: flex;
+      align-items: center;
+      height: 44px;
+
+      .ant-picker {
+        height: 100%;
+        border-radius: 8px;
+      }
+      .anticon-caret-right {
+        svg {
+          width: 8px;
+          margin: 0 8px;
+        }
+      }
+    }
+  }
+  .service__search {
+    flex-grow: 1;
+  }
+}
+.service__list__main {
+  // background-color: aqua;
+  flex-grow: 1;
+  .ant-table {
+    height: 330px;
+    max-height: 330px;
+  }
+  .ant-spin-nested-loading {
+    height: 100%;
+    .ant-spin-container {
+      height: 100%;
+      .ant-table-pagination {
+        flex-grow: 1;
+        display: flex !important;
+        align-items: end !important;
+        margin: 0 !important;
+      }
+    }
+  }
+}
+.ant-select-item-option-active {
+  background-color: $orange-light !important;
+}
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: $orange-light !important;
+  font-weight: 700;
+}

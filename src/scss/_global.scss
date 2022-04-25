@@ -44,3 +44,88 @@ input {
 .shadow {
   box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
 }
+
+.ant-spin-container {
+  display: flex;
+  flex-direction: column;
+}
+.ant-table {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 385px;
+  max-height: 385px;
+  background-color: transparent;
+  thead {
+    tr {
+      th,
+      td {
+        background-color: $orange;
+        color: white;
+
+        border: 0.5px solid white;
+      }
+    }
+  }
+
+  tbody {
+    tr:nth-child(odd) {
+      td {
+        background-color: white;
+      }
+    }
+    tr:nth-child(even) {
+      td {
+        background-color: $orange-light;
+      }
+    }
+  }
+}
+.ant-pagination {
+  flex-grow: 1;
+}
+.btn__action {
+  width: 80px;
+  height: 94px;
+  background-color: $orange-light;
+  border-radius: 8px 0px 0px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: $orange;
+  align-items: center;
+  padding: 12px 15px;
+  text-align: center;
+  cursor: pointer;
+  img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+}
+.dot--status {
+  min-width: 8px;
+  max-width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: blue;
+  margin-right: 4px;
+  display: inline-block;
+  &.dot--green {
+    background-color: $green;
+  }
+  &.dot--red {
+    background-color: $red;
+  }
+  &.dot--success {
+    background-color: #34cd26;
+  }
+  &.dot--precessing {
+    background-color: #5490eb;
+  }
+  &.dot--absent {
+    background-color: #6c7585;
+  }
+}

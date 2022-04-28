@@ -15,6 +15,7 @@ import AddDevice from "./Devices/AddDevice";
 import DeviceDetail from "./Devices/DeviceDetail";
 import AddService from "./Services/AddService";
 import ServiceDetail from "./Services/ServiceDetail";
+import NumberProvicerForm from "./NumberProvidation/NumberProvicerForm";
 
 type Props = {};
 
@@ -38,6 +39,10 @@ const UtilPage = (props: Props) => {
             <Route
               path={IRoute.NUMBER_PROVIDATION}
               element={<NumberProvidation />}
+            />
+            <Route
+              path={IRoute.NUMBER_PROVIDATION_CREATE}
+              element={<NumberProvicerForm />}
             />
             <Route path={IRoute.REPORT} element={<Report />} />
             <Route path={IRoute.INFO} element={<UserInfo />} />

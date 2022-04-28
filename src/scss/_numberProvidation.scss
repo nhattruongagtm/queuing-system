@@ -1,0 +1,80 @@
+.number__provide {
+  .provide__selects {
+    display: flex;
+    justify-content: left;
+    .devices__content__item {
+      width: unset !important;
+
+      .devices__search__child {
+        width: 100%;
+      }
+    }
+    .devices__search {
+      margin-left: 24px;
+    }
+
+    .provide__selects__item {
+      .numbers__content__item {
+        width: 154px !important;
+        margin-right: 0;
+      }
+      .number__search__input {
+        width: 100% !important;
+        // max-width: 240px !important;
+      }
+    }
+  }
+}
+.numbers__main {
+  border-radius: 16px;
+  background-color: white;
+  width: calc(100% - 24px);
+  height: calc(540px);
+  padding: 24px;
+  & > .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .form__title {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 48px;
+      color: $orange-active;
+      text-transform: uppercase;
+    }
+    .form__intro {
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 30px;
+      color: $gray-text;
+    }
+    .form__selects {
+      margin-bottom: 80px;
+      width: 400px;
+
+      .ant-select-selector{
+          height: 44px!important;
+          display: flex;
+          align-items: center;
+          border: 2px solid $gray-outline;
+      }
+    }
+    .form__actions {
+      display: flex;
+      gap: 32px;
+      button {
+          border: 2px solid $orange;
+        // width: 115px;
+        // height: 48px;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
+      }
+      button:first-child{
+          background-color: $orange-light;
+      }
+    }
+  }
+}

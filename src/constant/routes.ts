@@ -3,7 +3,6 @@ export enum IRoute {
   DASHBOARD = "/dashboard",
   DEVICES = "/thiet-bi",
   SERVICES = "/dich-vu",
-  NUMBER_PROVIDATION = "/cap-so",
   REPORT = "/bao-cao",
   SETTINGS = "/cai-dat",
   LOGIN = "/dang-nhap",
@@ -13,4 +12,6 @@ export enum IRoute {
   DEVICE_DETAIL = "/thiet-bi/chi-tiet-thiet-bi",
   ADD_SERVICE = "/dich-vu/them-dich-vu",
   SERVICE_DETAIL = "/dich-vu/chi-tiet-dich-vu",
+  NUMBER_PROVIDATION = "/cap-so",
+  NUMBER_PROVIDATION_CREATE = "/cap-so/cap-so-moi",
 }

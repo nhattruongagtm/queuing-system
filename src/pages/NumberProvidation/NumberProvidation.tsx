@@ -6,6 +6,7 @@ import { CaretRightOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import NumberList from "./NumberList";
+import NumberPopup from "./NumberPopup";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
@@ -78,6 +79,7 @@ const NumberProvidation = (props: Props) => {
           </div>
         </div>
       </Content>
+      
     </Layout>
   );
 };

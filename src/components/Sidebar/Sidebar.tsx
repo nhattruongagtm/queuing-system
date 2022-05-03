@@ -62,9 +62,9 @@ const Sidebar = (props: Props) => {
             </div>
             <input type="checkbox" id="setting" hidden />
             <div className="settings__more__panel">
-              <a>Quản lý vai trò</a>
-              <a>Quản lý tài khoản</a>
-              <a>Nhật ký người dùng</a>
+              <a onClick={()=>navigate(IRoute.SETTINGS_ROLE)}>Quản lý vai trò</a>
+              <a onClick={()=>navigate(IRoute.SETTINGS_ACCOUNT)}>Quản lý tài khoản</a>
+              <a onClick={()=>navigate(IRoute.SETTINGS_USER)}>Nhật ký người dùng</a>
             </div>
           </li>
         </label>

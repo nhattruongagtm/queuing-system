@@ -6,7 +6,7 @@ import { IRoute } from "../../constant/routes";
 
 type Props = {};
 
-const NumberList = (props: Props) => {
+const ReportList = (props: Props) => {
   const navigate = useNavigate();
   const data: Numbers[] = [
     {
@@ -34,7 +34,7 @@ const NumberList = (props: Props) => {
       createdDate: 1213213445,
       expireDate: 44545476876,
       provider: "Kiosk",
-      status: 0,
+      status: 2,
     },
   ];
   const columns = [
@@ -46,11 +46,7 @@ const NumberList = (props: Props) => {
         <p>{data.indexOf(record) + 1}</p>
       ),
     },
-    {
-      title: "Tên khách hàng",
-      dataIndex: "customerName",
-      key: "customerName",
-    },
+
     {
       title: "Tên dịch vụ",
       dataIndex: "deviceName",
@@ -67,15 +63,17 @@ const NumberList = (props: Props) => {
       ),
     },
     {
-      title: "Trạng thái",
+      title: "Tình trạng",
       key: "status",
       dataIndex: "status",
       render: (status: number) => (
         <div>
           <span
-            className={`dot--status dot--${status === 0 ? "green" : "red"}`}
+            className={`dot--status dot--${
+              status === 0 ? "used" : status === 1 ? "waiting" : "skip"
+            }`}
           ></span>
-          {status === 0 ? "Hoạt động" : "Ngưng hoạt động"}
+          {status === 0 ? "Đã sử dụng" : status === 1 ? "Đang chờ" : "Bỏ qua"}
         </div>
       ),
     },
@@ -83,20 +81,6 @@ const NumberList = (props: Props) => {
       title: "Nguồn cấp",
       key: "provider",
       dataIndex: "provider",
-    },
-    {
-      title: "",
-      key: "detail",
-      render: (record: Numbers) => (
-        <span className="link" onClick={() => navigate(IRoute.NUMBER_PROVIDATION_DETAIL)}>
-          Chi tiết
-        </span>
-      ),
-    },
-    {
-      title: "",
-      key: "update",
-      render: (record: Numbers) => <span className="link">Cập nhật</span>,
     },
   ];
 
@@ -110,4 +94,4 @@ const NumberList = (props: Props) => {
   );
 };
 
-export default NumberList;
+export default ReportList;

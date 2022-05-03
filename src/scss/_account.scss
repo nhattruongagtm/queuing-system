@@ -1,0 +1,35 @@
+.account {
+  &__select {
+    min-width: 300px;
+
+    .ant-select-show-arrow {
+      min-width: 300px;
+    }
+    .ant-input {
+      height: 44px;
+    }
+  }
+  &__options {
+    justify-content: space-between !important;
+  }
+}
+.add__account {
+  .add__device__main {
+    // height: 83% !important;
+  }
+  .ant-input-password {
+    border-radius: 8px;
+    height: 42px;
+  }
+  .ant-input-affix-wrapper {
+    padding: 0 11px !important;
+  }
+  &__form {
+    width: calc(100% - 24px) !important;
+  }
+}
+.account__tags {
+  display: flex;
+  justify-content: center;
+  padding: 0px !important;
+}

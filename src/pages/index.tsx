@@ -16,11 +16,27 @@ import DeviceDetail from "./Devices/DeviceDetail";
 import AddService from "./Services/AddService";
 import ServiceDetail from "./Services/ServiceDetail";
 import NumberProvicerForm from "./NumberProvidation/NumberProvicerForm";
+import NumberPopup from "./NumberProvidation/NumberPopup";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { ModalState } from "../slice/modalSlice";
+import NumberDetail from "./NumberProvidation/NumberDetail";
+import AddRole from "./Settings/AddRole";
+import AddAccount from "./Settings/AddAccount";
+import Role from "./Settings/Role";
+import Account from "./Settings/Account";
+import User from "./Settings/User";
 
 type Props = {};
 
 const UtilPage = (props: Props) => {
   const { Header, Footer, Sider, Content } = Layout;
+  const modalState = useSelector((state: RootState) => state.modal.status);
+  const Layer = () => (
+    <div
+      className={`layer ${modalState !== ModalState.HIDDEN ? "display" : ""}`}
+    ></div>
+  );
   return (
     <Layout className="admin">
       <Sider className="sidebar">
@@ -44,16 +60,30 @@ const UtilPage = (props: Props) => {
               path={IRoute.NUMBER_PROVIDATION_CREATE}
               element={<NumberProvicerForm />}
             />
+            <Route
+              path={IRoute.NUMBER_PROVIDATION_DETAIL}
+              element={<NumberDetail />}
+            />
             <Route path={IRoute.REPORT} element={<Report />} />
             <Route path={IRoute.INFO} element={<UserInfo />} />
             <Route path={IRoute.ADD_DEVICE} element={<AddDevice />} />
             <Route path={IRoute.DEVICE_DETAIL} element={<DeviceDetail />} />
             <Route path={IRoute.ADD_SERVICE} element={<AddService />} />
             <Route path={IRoute.SERVICE_DETAIL} element={<ServiceDetail />} />
+            <Route path={IRoute.SETTINGS_ROLE} element={<Role />} />
+            <Route path={IRoute.SETTINGS_ADD_ROLE} element={<AddRole />} />
+            <Route path={IRoute.SETTINGS_ACCOUNT} element={<Account />} />
+            <Route path={IRoute.SETTINGS_USER} element={<User />} />
+            <Route
+              path={IRoute.SETTINGS_ADD_ACCOUNT}
+              element={<AddAccount />}
+            />
             <Route path="*" element={<>Not found</>} />
           </Routes>
         </div>
       </Content>
+      <Layer />
+      <NumberPopup />
     </Layout>
   );
 };

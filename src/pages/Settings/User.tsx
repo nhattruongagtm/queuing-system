@@ -3,13 +3,13 @@ import { DatePicker, Input, Layout, Select } from "antd";
 import React from "react";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
-import ReportList from "./ReportList";
+import UserList from "./UserList";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 
-const Report = (props: Props) => {
+const User = (props: Props) => {
   const navigate = useNavigate();
   return (
     <Layout className="dashbad services number__provide">
@@ -19,8 +19,8 @@ const Report = (props: Props) => {
         </h3>
         <div className="devices__main">
           <div className="devices__list">
-            <div className="devices__content__selects provide__selects">
-              <div className="devices__content__item provide__selects__item">
+            <div className="devices__content__selects provide__selects user__list">
+              <div className="devices__content__item">
                 <p>Chọn thời gian</p>
                 <div className="services__datepickers">
                   <DatePicker />
@@ -28,14 +28,17 @@ const Report = (props: Props) => {
                   <DatePicker />
                 </div>
               </div>
+              <div className="devices__content__item">
+                <div className="devices__search__child">
+                  <p className="devices__search__title">Từ khóa</p>
+                  <div className="devices__search__input">
+                    <Input />
+                    {/* <SearchOutlined /> */}
+                  </div>
+                </div>
+              </div>
             </div>
-            <ReportList />
-          </div>
-          <div className="devices__tags">
-            <div className="devices__tags__add report__add">
-              <img src="./imgs/download.svg" alt="" />
-              Tải về
-            </div>
+            <UserList />
           </div>
         </div>
       </Content>
@@ -43,4 +46,4 @@ const Report = (props: Props) => {
   );
 };
 
-export default Report;
+export default User;

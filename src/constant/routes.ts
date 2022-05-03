@@ -14,4 +14,10 @@ export enum IRoute {
   SERVICE_DETAIL = "/dich-vu/chi-tiet-dich-vu",
   NUMBER_PROVIDATION = "/cap-so",
   NUMBER_PROVIDATION_CREATE = "/cap-so/cap-so-moi",
+  NUMBER_PROVIDATION_DETAIL = "/cap-so/chi-tiet",
+  SETTINGS_ADD_ROLE = "/cai-dat/them-vai-tro",
+  SETTINGS_ROLE = "/cai-dat/quan-ly-vai-tro",
+  SETTINGS_ACCOUNT = "/cai-dat/tai-khoan",
+  SETTINGS_ADD_ACCOUNT = "/cai-dat/them=tai-khoan",
+  SETTINGS_USER = "/cai-dat/nguoi-dung",
 }

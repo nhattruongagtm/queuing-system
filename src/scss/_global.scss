@@ -82,6 +82,23 @@ input {
 }
 .ant-pagination {
   flex-grow: 1;
+  .ant-pagination-item,.ant-pagination-next,.ant-pagination-prev,.ant-pagination-next {
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 4px;
+    a {
+      font-size: 16px;
+      font-weight: 600;
+      color: $gray-text;
+    }
+  }
+}
+.ant-pagination-item-active {
+  color: white !important;
+  background-color: $orange-active !important;
+  a {
+    color: white !important;
+  }
 }
 .btn__action {
   width: 80px;
@@ -128,4 +145,26 @@ input {
   &.dot--absent {
     background-color: #6c7585;
   }
+  &.dot--skip {
+    background-color: #e73f3f;
+  }
+  &.dot--waiting {
+    background-color: #4277ff;
+  }
+  &.dot--used {
+    background-color: #7e7d88;
+  }
+}
+.text {
+  font-size: 16px;
+  line-height: 24px;
+}
+.text-main {
+  color: $text-primary;
+  font-weight: 600;
+  min-width: 130px;
+}
+.text-content {
+  color: $text-color;
+  font-weight: 400;
 }

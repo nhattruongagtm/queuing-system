@@ -1,0 +1,61 @@
+.add__role {
+}
+.roles__list {
+  justify-content: right!important;
+}
+.role__manager {
+  width: calc(100% - 24px) !important;
+}
+.role__main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  height: 100%;
+  .role__checkboxs__main {
+    height: 100%;
+  }
+  .role__inputs {
+  }
+  .role__checkboxs {
+    height: calc(100% - 32px);
+    max-height: calc(100% - 32px);
+
+    .role__list {
+      width: 100%;
+      border-radius: 8px;
+      height: calc(100% - 48px);
+      height: calc(334px);
+      background-color: $orange-light;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      &::-webkit-scrollbar-thumb {
+        width: 4px;
+        border-radius: 8px;
+        background-color: $orange;
+      }
+
+      .role__list__scroll {
+        padding: 16px 24px;
+        width: 100%;
+        .role__list__item {
+          margin-bottom: 24px;
+          .title {
+            color: $orange;
+            margin-bottom: 12px;
+          }
+
+          .item__list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            &__item {
+            }
+          }
+        }
+      }
+    }
+  }
+}

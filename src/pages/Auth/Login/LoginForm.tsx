@@ -1,6 +1,9 @@
 import { Input } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { login } from "../../../api/auth";
+import { IRoute } from "../../../constant/routes";
 import { updateState } from "../../../slice/AuthSlice";
 
 interface Props {}
@@ -17,6 +20,7 @@ const LoginForm = (props: Props) => {
   const [input, setInput] = useState<LoginInput>(initialInput);
   const [error, setError] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,18 +28,30 @@ const LoginForm = (props: Props) => {
     const { username, password } = input;
 
     if (username.trim() !== "" && password.trim() !== "") {
-      if (username === "nhattruongagtm" && password === "123") {
-        setError(false);
-        setInput(initialInput);
-        alert("Đăng nhập thành công!");
-      } else {
-        setError(true);
-      }
+      // if (username === "nhattruongagtm" && password === "123") {
+      //   setError(false);
+      //   setInput(initialInput);
+      //   alert("Đăng nhập thành công!");
+      // } else {
+      //   setError(true);
+      // }
+      login(username, password)
+        .then((res) => {
+          if (res) {
+            alert("Đăng nhập thành công!");
+            navigate(IRoute.DASHBOARD);
+          } else {
+            setError(true);
+          }
+        })
+        .then((e) => {
+          console.log(e);
+        });
     }
   };
-  const handleRedirectForgotPassword = () =>{
-      dispatch(updateState(1))
-  }
+  const handleRedirectForgotPassword = () => {
+    dispatch(updateState(1));
+  };
   return (
     <form className="login__form" onSubmit={handleLogin}>
       <div className="input input--text">
@@ -71,7 +87,11 @@ const LoginForm = (props: Props) => {
       >
         Đăng nhập
       </button>
-      {error && <a className="login__forgot" onClick={handleRedirectForgotPassword}>Quên mật khẩu?</a>}
+      {error && (
+        <a className="login__forgot" onClick={handleRedirectForgotPassword}>
+          Quên mật khẩu?
+        </a>
+      )}
     </form>
   );
 };

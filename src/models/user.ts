@@ -5,3 +5,8 @@ export interface User {
   ip: string;
   formal: string;
 }
+
+export interface Login {
+  username: string;
+  password: string;
+}

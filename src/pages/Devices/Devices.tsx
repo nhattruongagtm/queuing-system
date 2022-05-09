@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout } from "antd";
 import { Select } from "antd";
 import { Input } from "antd";
@@ -6,13 +6,28 @@ import { SearchOutlined } from "@ant-design/icons";
 import DeviceList from "./DeviceList";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
+import { useDispatch } from "react-redux";
+import { filterDevice, resetEdit } from "../../slice/deviceSlice";
+import { FilterParams } from "../../api/device";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 
 const Devices = (props: Props) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [params, setParams] = useState<FilterParams>({
+    activeStatus: -1,
+    connectStatus: -1,
+    search: "",
+  });
+
+  const handleCreateDevice = () => {
+    dispatch(resetEdit());
+    navigate(IRoute.ADD_DEVICE);
+  };
+
   return (
     <Layout className="dashbad">
       <Content className="dasbard__content">
@@ -25,20 +40,47 @@ const Devices = (props: Props) => {
               <div className="devices__content__item select__active">
                 <p>Trạng thái hoạt động</p>
                 <Select
-                  defaultValue={"all"}
+                  defaultValue={"-1"}
                   className="devices__content__item "
+                  onChange={(value) => {
+                    setParams({
+                      ...params,
+                      activeStatus: Number(value),
+                    });
+                    dispatch(
+                      filterDevice({
+                        ...params,
+                        activeStatus: Number(value),
+                      })
+                    );
+                  }}
                 >
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Hoạt động</Option>
-                  <Option value="inactive">Ngưng hoạt động</Option>
+                  <Option value="-1">Tất cả</Option>
+                  <Option value="0">Hoạt động</Option>
+                  <Option value="1">Ngưng hoạt động</Option>
                 </Select>
               </div>
               <div className="devices__content__item">
                 <p>Trạng thái kết nối</p>
-                <Select defaultValue={"all"} className="devices__content__item">
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Kết nối</Option>
-                  <Option value="inactive">Mất kết nối</Option>
+                <Select
+                  defaultValue={"-1"}
+                  className="devices__content__item"
+                  onChange={(value) => {
+                    setParams({
+                      ...params,
+                      connectStatus: Number(value),
+                    });
+                    dispatch(
+                      filterDevice({
+                        ...params,
+                        connectStatus: Number(value),
+                      })
+                    );
+                  }}
+                >
+                  <Option value="-1">Tất cả</Option>
+                  <Option value="0">Kết nối</Option>
+                  <Option value="1">Mất kết nối</Option>
                 </Select>
               </div>
               <div className="devices__content__item devices__search">
@@ -54,9 +96,10 @@ const Devices = (props: Props) => {
             <DeviceList />
           </div>
           <div className="devices__tags">
-            <div className="devices__tags__add" onClick={()=>navigate(IRoute.ADD_DEVICE)}>
+            <div className="devices__tags__add" onClick={handleCreateDevice}>
               <img src="./imgs/add.svg" alt="" />
-              Thêm thiết bị</div>
+              Thêm thiết bị
+            </div>
           </div>
         </div>
       </Content>

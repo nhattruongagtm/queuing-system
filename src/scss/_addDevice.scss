@@ -47,6 +47,14 @@
               }
             }
 
+            .input--password {
+              height: 40px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              overflow: hidden;
+            }
+
             input {
             }
             .ant-select-selector {
@@ -62,7 +70,7 @@
         }
         .device__input__which {
           margin-bottom: 16px;
-          textarea{
+          textarea {
             border-radius: 8px;
           }
         }
@@ -147,7 +155,7 @@
   }
 }
 .ant-select-selector {
-  border-radius: 8px!important;
+  border-radius: 8px !important;
 }
 .device__selector,
 .ant-select-selection-overflow {
@@ -157,8 +165,8 @@
 .ant-tag-has-color {
   padding: 4px 12px !important;
   border-radius: 9px;
-  margin-right: 15px!important;
+  margin-right: 15px !important;
 }
-.ant-tag-close-icon{
+.ant-tag-close-icon {
   margin-left: 15px;
 }

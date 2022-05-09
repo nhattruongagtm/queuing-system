@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Space } from "antd";
 import { Device } from "../../models/device";
-import {useNavigate} from 'react-router'
+import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
+import { useDispatch, useSelector } from "react-redux";
+import { filter, FilterParams, loadDeviceList } from "../../api/device";
+import {
+  loadDeviceList as loadList,
+  updateDevice,
+} from "../../slice/deviceSlice";
+import { RootState } from "../../store";
 type Props = {};
-
-
 
 const DeviceList = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useSelector((state: RootState) => state.devices.fitler);
+  const deviceList = useSelector(
+    (state: RootState) => state.devices.deviceList
+  );
   const columns = [
     {
       title: "Mã thiết bị",
@@ -59,7 +69,7 @@ const DeviceList = (props: Props) => {
         <div className="device__usedDevice">
           {Array.from(new Array(2)).map((item, index) => (
             <>
-              {index === 0 && <h5>{record.usedDevice}</h5>}
+              {index === 0 && <h5>{record.usedDevice.join(", ")}</h5>}
               {index === 1 && <span className="link">Xem thêm</span>}
             </>
           ))}
@@ -69,48 +79,47 @@ const DeviceList = (props: Props) => {
     {
       title: "",
       key: "detail",
-      render: (record: Device) => <span className="link" onClick={()=>navigate(IRoute.DEVICE_DETAIL)}>Chi tiết</span>,
+      render: (record: Device) => (
+        <span
+          className="link"
+          onClick={() => navigate(`${IRoute.DEVICE_DETAIL}/${record.id}`)}
+        >
+          Chi tiết
+        </span>
+      ),
     },
     {
       title: "",
       key: "update",
-      render: (record: Device) => <span className="link" onClick={()=>navigate(IRoute.ADD_DEVICE)}>Cập nhật</span>,
+      render: (record: Device) => (
+        <span className="link" onClick={() => handleUpdate(record)}>
+          Cập nhật
+        </span>
+      ),
     },
   ];
-  
-  const data: Device[] = [
-    {
-      id: "KIO_01",
-      name: "Kiosk",
-      ip: "192.168.1.10",
-      activeStatus: 0,
-      connectStatus: 1,
-      usedDevice:
-        "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, tai mũi họng, Khám hô hấp, Khám tổng quát",
-    },
-    {
-      id: "KIO_02",
-      name: "Kiosk",
-      ip: "192.168.1.10",
-      activeStatus: 1,
-      connectStatus: 0,
-      usedDevice:
-        "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, tai mũi họng, Khám hô hấp, Khám tổng quát",
-    },
-    {
-      id: "KIO_03",
-      name: "Kiosk",
-      ip: "192.168.1.10",
-      activeStatus: 0,
-      connectStatus: 0,
-      usedDevice:
-        "Khám tim mạch, Khám Sản - Phụ khoa, Khám răng hàm mặt, tai mũi họng, Khám hô hấp, Khám tổng quát",
-    },
-  ];
+
+  const handleUpdate = (device: Device) => {
+    dispatch(updateDevice(device));
+    navigate(IRoute.ADD_DEVICE);
+  };
+
+  useEffect(() => {
+    loadDeviceList()
+      .then((res) => {
+        const list = [...res];
+
+        dispatch(loadList(filter(params, list)));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [params]);
+
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={deviceList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

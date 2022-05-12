@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox, DatePicker, Input, Layout, Select, Table } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router";
+import { Service } from "../../models/services";
+import { getServiceById } from "../../api/service";
+import { useDispatch } from "react-redux";
+import { updateService } from "../../slice/serviceSlice";
+import { IRoute } from "../../constant/routes";
 
 interface Props {}
 
@@ -8,6 +14,9 @@ const { Content } = Layout;
 const { Option } = Select;
 
 const ServiceDetail = (props: Props) => {
+  const naviagate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams().id;
   const columns = [
     {
       title: "Số thứ tự",
@@ -70,6 +79,20 @@ const ServiceDetail = (props: Props) => {
       status: 0,
     },
   ];
+
+  const [service, setService] = useState<Service>();
+
+  useEffect(() => {
+    params &&
+      getServiceById(params)
+        .then((res) => {
+          res && setService(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+  }, []);
+
   return (
     <Layout className="add__device device__detail service__detail">
       <Content className="dasbard__content device__detail__content">
@@ -77,57 +100,80 @@ const ServiceDetail = (props: Props) => {
         <div className="device__detail__parent">
           <div className="add__device__form service__detail__main">
             <div className="add__device__main add__service__detail">
-              <div className="device__title title">Thông tin dịch vụ</div>
-              <div className="device__detail__main service__detail__info">
-                <div className="device__detail__item">
-                  <h4 className="detail__item__title">Mã thiết bị:</h4>
-                  <h4 className="detail__item__content">KIO_01</h4>
-                </div>
+              {service && (
+                <>
+                  {" "}
+                  <div className="device__title title">Thông tin dịch vụ</div>
+                  <div className="device__detail__main service__detail__info">
+                    <div className="device__detail__item">
+                      <h4 className="detail__item__title">Mã dịch vụ:</h4>
+                      <h4 className="detail__item__content">{service.id}</h4>
+                    </div>
 
-                <div className="device__detail__item">
-                  <h4 className="detail__item__title">Tên thiết bị:</h4>
-                  <h4 className="detail__item__content">Kiosk</h4>
-                </div>
-                <div className="device__detail__item">
-                  <h4 className="detail__item__title">Tên đăng nhập:</h4>
-                  <h4 className="detail__item__content">Linhkyo011</h4>
-                </div>
-              </div>
-              <div className="device__title title title-t">Quy tắc cấp số</div>
-              <div className="device__detail__main service__detail__info">
-                <div className="device__detail__item service__type__check">
-                  <h4 className="detail__item__title">Tăng tự động:</h4>
-                  <h4 className="detail__item__content">
-                    {" "}
-                    <div className="service__principles__item">
-                      <Input placeholder="0001" /> <span>đến</span>{" "}
-                      <Input placeholder="9999" />
+                    <div className="device__detail__item">
+                      <h4 className="detail__item__title">Tên dịch vụ:</h4>
+                      <h4 className="detail__item__content">{service.name}</h4>
                     </div>
-                  </h4>
-                </div>
-                <div className="device__detail__item service__type__check">
-                  <h4 className="detail__item__title">Prefix:</h4>
-                  <h4 className="detail__item__content">
-                    <div className="service__principles__item">
-                      <Input placeholder="0001" />
+                    <div className="device__detail__item">
+                      <h4 className="detail__item__title">Mô tả:</h4>
+                      <h4 className="detail__item__content">{service.desc}</h4>
                     </div>
-                  </h4>
-                </div>
-                <div className="device__detail__item service__type__check">
-                  <h4 className="detail__item__title">Tên thiết bị:</h4>
-                  <h4 className="detail__item__content">
-                    <div className="service__principles__item">
-                      <Input placeholder="0001" />
+                  </div>
+                  <div className="device__title title title-t">
+                    Quy tắc cấp số
+                  </div>
+                  <div className="device__detail__main service__detail__info">
+                    <div className="device__detail__item service__type__check">
+                      <h4 className="detail__item__title">Tăng tự động:</h4>
+                      <h4 className="detail__item__content">
+                        {" "}
+                        {service.increase.from !== 0 &&
+                          service.increase.to !== 0 && (
+                            <div className="service__principles__item">
+                              <Input
+                                placeholder="0001"
+                                value={service.increase.from}
+                              />{" "}
+                              <span>đến</span>{" "}
+                              <Input
+                                placeholder="9999"
+                                value={service.increase.to}
+                              />
+                            </div>
+                          )}
+                      </h4>
                     </div>
-                  </h4>
-                </div>
-                <div className="device__detail__item service__type__check">
-                  <h4 className="detail__item__title">Reset mỗi ngày</h4>
-                </div>
-                <div className="device__detail__item service__type__check">
-                  <h4 className="detail__item__title">Ví dụ: 201-2001</h4>
-                </div>
-              </div>
+                    {service.prefix !== 0 && (
+                      <div className="device__detail__item service__type__check">
+                        <h4 className="detail__item__title">Prefix:</h4>
+                        <h4 className="detail__item__content">
+                          <div className="service__principles__item">
+                            <Input placeholder="0001" value={service.prefix} />
+                          </div>
+                        </h4>
+                      </div>
+                    )}
+                    {service.surfix !== 0 && (
+                      <div className="device__detail__item service__type__check">
+                        <h4 className="detail__item__title">Surfix:</h4>
+                        <h4 className="detail__item__content">
+                          <div className="service__principles__item">
+                            <Input placeholder="0001" value={service.surfix} />
+                          </div>
+                        </h4>
+                      </div>
+                    )}
+                    {service.isReset && (
+                      <div className="device__detail__item service__type__check">
+                        <h4 className="detail__item__title">Reset mỗi ngày</h4>
+                      </div>
+                    )}
+                    <div className="device__detail__item service__type__check">
+                      <h4 className="detail__item__title">Ví dụ: 201-2001</h4>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="service__detail__list">
@@ -170,11 +216,17 @@ const ServiceDetail = (props: Props) => {
             />
           </div>
           <div className="devices__tags device__btn">
-            <div className="devices__tags__add ">
+            <div
+              className="devices__tags__add "
+              onClick={() => {
+                service && dispatch(updateService(service));
+                naviagate(IRoute.ADD_SERVICE);
+              }}
+            >
               <img src="./imgs/edit.svg" alt="" />
               Cập nhật thiết bị
             </div>
-            <div className="devices__tags__add ">
+            <div className="devices__tags__add " onClick={() => naviagate(-1)}>
               <img src="./imgs/edit.svg" alt="" />
               Quay lại
             </div>

@@ -72,7 +72,7 @@ const UtilPage = (props: Props) => {
               element={<DeviceDetail />}
             />
             <Route path={IRoute.ADD_SERVICE} element={<AddService />} />
-            <Route path={IRoute.SERVICE_DETAIL} element={<ServiceDetail />} />
+            <Route path={`${IRoute.SERVICE_DETAIL}/:id`} element={<ServiceDetail />} />
             <Route path={IRoute.SETTINGS_ROLE} element={<Role />} />
             <Route path={IRoute.SETTINGS_ADD_ROLE} element={<AddRole />} />
             <Route path={IRoute.SETTINGS_ACCOUNT} element={<Account />} />

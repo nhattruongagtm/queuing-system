@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router";
 import "antd/dist/antd.css";
-import "./scss/app.scss";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Routes, useLocation } from "react-router";
+import { createDummyService } from "./api/service";
 import { IRoute } from "./constant/routes";
 import UtilPage from "./pages";
 import Auth from "./pages/Auth/Login/Auth";
-import ChangePassword from "./pages/Auth/Login/ChangePassword";
-import { createDevice, createDummyData, loadDeviceList } from "./api/device";
-import { useDispatch } from "react-redux";
-import { resetEdit } from "./slice/deviceSlice";
+import "./scss/app.scss";
 function App() {
   const location = useLocation().pathname;
   const dispatch = useDispatch();
 
   useEffect(() => {
     // createDummyData(10);
+    // createDummyService(10);
   }, []);
 
   return (

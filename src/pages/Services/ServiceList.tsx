@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Space } from "antd";
 import { Service } from "../../models/services";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
+import { filterServiceList, loadServiceList } from "../../api/service";
+import { useDispatch, useSelector } from "react-redux";
+import { updateService } from "../../slice/serviceSlice";
+import { RootState } from "../../store";
 type Props = {};
 
 const SeviceList = (props: Props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [serviceList, setServiceList] = useState<Service[]>([]);
+  const filter = useSelector((state: RootState) => state.services.fitler);
+  const handleUpdate = (service: Service) => {
+    dispatch(updateService(service));
+    navigate(IRoute.ADD_SERVICE);
+  };
   const columns = [
     {
       title: "Mã dịch vụ",
@@ -41,7 +52,10 @@ const SeviceList = (props: Props) => {
       title: "",
       key: "detail",
       render: (record: Service) => (
-        <span className="link" onClick={() => navigate(IRoute.SERVICE_DETAIL)}>
+        <span
+          className="link"
+          onClick={() => navigate(`${IRoute.SERVICE_DETAIL}/${record.id}`)}
+        >
           Chi tiết
         </span>
       ),
@@ -50,37 +64,26 @@ const SeviceList = (props: Props) => {
       title: "",
       key: "update",
       render: (record: Service) => (
-        <span className="link" onClick={() => navigate(IRoute.ADD_SERVICE)}>
+        <span className="link" onClick={() => handleUpdate(record)}>
           Cập nhật
         </span>
       ),
     },
   ];
 
-  const data: Service[] = [
-    {
-      id: "KIO_01",
-      name: "Kiosk",
-      desc: "Mô tả dịch vụ 1",
-      status: 0,
-    },
-    {
-      id: "KIO_02",
-      name: "Kiosk",
-      desc: "Mô tả dịch vụ 2",
-      status: 1,
-    },
-    {
-      id: "KIO_03",
-      name: "Kiosk",
-      desc: "Mô tả dịch vụ 3",
-      status: 0,
-    },
-  ];
+  useEffect(() => {
+    loadServiceList()
+      .then((res) => {
+        setServiceList(filterServiceList(filter, res));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [filter]);
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={serviceList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

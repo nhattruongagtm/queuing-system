@@ -40,8 +40,8 @@ const Devices = (props: Props) => {
               <div className="devices__content__item select__active">
                 <p>Trạng thái hoạt động</p>
                 <Select
-                  defaultValue={"-1"}
                   className="devices__content__item "
+                  defaultValue={"-1"}
                   onChange={(value) => {
                     setParams({
                       ...params,
@@ -87,7 +87,17 @@ const Devices = (props: Props) => {
                 <div className="devices__search__child">
                   <p className="devices__search__title">Từ khóa</p>
                   <div className="devices__search__input">
-                    <Input />
+                    <Input
+                      
+                      onChange={(e) =>
+                        dispatch(
+                          filterDevice({
+                            ...params,
+                            search: e.target.value,
+                          })
+                        )
+                      }
+                    />
                     {/* <SearchOutlined /> */}
                   </div>
                 </div>

@@ -11,9 +11,9 @@ import { Device } from "../models/device";
 import { db } from "./fbConfig";
 
 export interface FilterParams {
-  activeStatus?: number;
-  connectStatus?: number;
-  search?: string;
+  activeStatus: number;
+  connectStatus: number;
+  search: string;
 }
 export type DataList<T> = T[];
 const DEVICE_DOCS = "devices";
@@ -149,11 +149,11 @@ export const filter = (params: FilterParams, list: DataList<Device>) => {
   if (connectStatus && connectStatus !== -1) {
     rs = rs.filter((item) => item.connectStatus === connectStatus);
   }
-  // if (search) {
-  //   if (search.trim() === "") {
-  //     return rs;
-  //   }
-  //   return rs.filter((item) => item.id.indexOf(search) !== -1);
-  // }
+  if (search) {
+    if (search.trim() === "") {
+      return rs;
+    }
+    return rs.filter((item) => item.id.indexOf(search) !== -1);
+  }
   return rs;
 };

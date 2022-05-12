@@ -6,6 +6,9 @@ import { CaretRightOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import ServiceList from "./ServiceList";
 import { IRoute } from "../../constant/routes";
+import { useDispatch, useSelector } from "react-redux";
+import { filterService, resetEditService } from "../../slice/serviceSlice";
+import { RootState } from "../../store";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
@@ -13,6 +16,8 @@ const { Search } = Input;
 
 const Services = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const filter = useSelector((state: RootState) => state.services.fitler);
   return (
     <Layout className="dashbad services">
       <Content className="dasbard__content">
@@ -25,27 +30,60 @@ const Services = (props: Props) => {
               <div className="devices__content__item select__active">
                 <p>Trạng thái hoạt động</p>
                 <Select
-                  defaultValue={"all"}
+                  defaultValue={"-1"}
                   className="devices__content__item "
+                  onChange={(value) =>
+                    dispatch(
+                      filterService({
+                        ...filter,
+                        status: Number(value),
+                      })
+                    )
+                  }
                 >
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Hoạt động</Option>
-                  <Option value="inactive">Ngưng hoạt động</Option>
+                  <Option value="-1">Tất cả</Option>
+                  <Option value="0">Hoạt động</Option>
+                  <Option value="1">Ngưng hoạt động</Option>
                 </Select>
               </div>
               <div className="devices__content__item">
                 <p>Chọn thời gian</p>
                 <div className="services__datepickers">
-                  <DatePicker />
+                  <DatePicker
+                    onChange={(value, dateString) =>
+                      dispatch(
+                        filterService({
+                          ...filter,
+                          dateFrom: dateString,
+                        })
+                      )
+                    }
+                  />
                   <CaretRightOutlined />
-                  <DatePicker />
+                  <DatePicker
+                    onChange={(value, dateString) =>
+                      dispatch(
+                        filterService({
+                          ...filter,
+                          dateTo: dateString,
+                        })
+                      )
+                    }
+                  />
                 </div>
               </div>
               <div className="devices__content__item devices__search">
                 <div className="devices__search__child">
                   <p className="devices__search__title">Từ khóa</p>
                   <div className="devices__search__input">
-                    <Input />
+                    <Input
+                      value={filter.search}
+                      onChange={(e) =>
+                        dispatch(
+                          filterService({ ...filter, search: e.target.value })
+                        )
+                      }
+                    />
                     {/* <SearchOutlined /> */}
                   </div>
                 </div>
@@ -56,7 +94,10 @@ const Services = (props: Props) => {
           <div className="devices__tags">
             <div
               className="devices__tags__add"
-              onClick={() => navigate(IRoute.ADD_SERVICE)}
+              onClick={() => {
+                navigate(IRoute.ADD_SERVICE);
+                dispatch(resetEditService());
+              }}
             >
               <img src="./imgs/add.svg" alt="" />
               Thêm dịch vụ

@@ -184,7 +184,7 @@ const AddDevice = (props: Props) => {
                       type: value,
                     })
                   }
-                  value={input.type}
+                  defaultValue={"Kiosk"}
                 >
                   <Option value="Kiosk"> Kiosk</Option>
                   <Option value="Display counter"> Display counter</Option>

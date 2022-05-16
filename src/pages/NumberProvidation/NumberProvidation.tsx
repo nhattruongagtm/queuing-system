@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker, Layout } from "antd";
 import { Select } from "antd";
 import { Input } from "antd";
@@ -7,13 +7,50 @@ import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import NumberList from "./NumberList";
 import NumberPopup from "./NumberPopup";
+import { useDispatch, useSelector } from "react-redux";
+import { filterNumber } from "../../slice/numberSlice";
+import { RootState } from "../../store";
+import { Service } from "../../models/services";
+import { loadServiceList } from "../../api/service";
+import { Device } from "../../models/device";
+import { loadDeviceList } from "../../api/device";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 
+export interface FilterNumber {
+  serviceID: string;
+  status: number;
+  deviceID: string;
+  dateFrom: string;
+  dateTo: string;
+  search: string;
+}
+
 const NumberProvidation = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const filter = useSelector((state: RootState) => state.numbers.fitler);
+  const [service, setService] = useState<Service[]>([]);
+  const [device, setDevice] = useState<Device[]>([]);
+
+  useEffect(() => {
+    loadServiceList()
+      .then((res) => {
+        setService(res.slice(0, 5));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    loadDeviceList()
+      .then((res) => {
+        setDevice(res.slice(0, 5));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
   return (
     <Layout className="dashbad services number__provide">
       <Content className="dasbard__content">
@@ -24,44 +61,113 @@ const NumberProvidation = (props: Props) => {
           <div className="devices__list">
             <div className="devices__content__selects provide__selects">
               <div className="devices__content__item provide__selects__item select__active">
-                <p>Trạng thái hoạt động</p>
-                <Select defaultValue={"all"} className="numbers__content__item">
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Kiosk</Option>
-                  <Option value="inactive">Hệ thống</Option>
+                <p>Tên dịch vụ</p>
+                <Select
+                  defaultValue={"-1"}
+                  className="numbers__content__item"
+                  onChange={(value) =>
+                    dispatch(
+                      filterNumber({
+                        ...filter,
+                        serviceID: value,
+                      })
+                    )
+                  }
+                >
+                  <Option value="-1">Tất cả</Option>
+
+                  {service.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
                 </Select>
               </div>
               <div className="devices__content__item provide__selects__item select__active">
                 <p>Tình trạng</p>
-                <Select defaultValue={"all"} className="numbers__content__item">
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Dang chờ</Option>
-                  <Option value="waiting">Đã sử dụng</Option>
-                  <Option value="skip">Bỏ qua</Option>
+                <Select
+                  defaultValue={"-1"}
+                  className="numbers__content__item"
+                  onChange={(value) =>
+                    dispatch(
+                      filterNumber({
+                        ...filter,
+                        status: Number(value),
+                      })
+                    )
+                  }
+                >
+                  <Option value="-1">Tất cả</Option>
+                  <Option value="0">Đang chờ</Option>
+                  <Option value="1">Đã sử dụng</Option>
+                  <Option value="2">Bỏ qua</Option>
                 </Select>
               </div>
               <div className="devices__content__item provide__selects__item select__active">
                 <p>Nguồn cấp</p>
-                <Select defaultValue={"all"} className="numbers__content__item">
-                  <Option value="all">Tất cả</Option>
-                  <Option value="active">Khám sản - Phụ khoa</Option>
-                  <Option value="inactive">Khám răng hàm mặt</Option>
+                <Select
+                  defaultValue={"-1"}
+                  className="numbers__content__item"
+                  onChange={(value) =>
+                    dispatch(
+                      filterNumber({
+                        ...filter,
+                        deviceID: value,
+                      })
+                    )
+                  }
+                >
+                  <Option value="-1">Tất cả</Option>
+
+                  {device.map((item) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))}
                 </Select>
               </div>
 
               <div className="devices__content__item provide__selects__item">
                 <p>Chọn thời gian</p>
                 <div className="services__datepickers">
-                  <DatePicker />
+                  <DatePicker
+                    onChange={(dates, date) =>
+                      dispatch(
+                        filterNumber({
+                          ...filter,
+                          dateFrom: date,
+                        })
+                      )
+                    }
+                  />
                   <CaretRightOutlined />
-                  <DatePicker />
+                  <DatePicker
+                    onChange={(dates, date) =>
+                      dispatch(
+                        filterNumber({
+                          ...filter,
+                          dateTo: date,
+                        })
+                      )
+                    }
+                  />
                 </div>
               </div>
               <div className="devices__content__item devices__search provide__selects__item">
                 <div className="devices__search__child">
                   <p className="devices__search__title">Từ khóa</p>
                   <div className="devices__search__input number__search__input">
-                    <Input />
+                    <Input
+                      value={filter.search}
+                      onChange={(e) =>
+                        dispatch(
+                          filterNumber({
+                            ...filter,
+                            search: e.target.value,
+                          })
+                        )
+                      }
+                    />
                   </div>
                 </div>
               </div>
@@ -79,7 +185,6 @@ const NumberProvidation = (props: Props) => {
           </div>
         </div>
       </Content>
-      
     </Layout>
   );
 };

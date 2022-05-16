@@ -6,8 +6,9 @@ import { hiddenModal, ModalState } from "../../slice/modalSlice";
 type Props = {};
 
 const NumberPopup = (props: Props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const modalState = useSelector((state: RootState) => state.modal.status);
+  const orderPopup = useSelector((state: RootState) => state.numbers.edit);
   return (
     <div
       className={`number__note ${
@@ -15,23 +16,23 @@ const NumberPopup = (props: Props) => {
       }`}
     >
       <div className="number__note__header">
-        <CloseOutlined onClick={()=>dispatch(hiddenModal())}/>
+        <CloseOutlined onClick={() => dispatch(hiddenModal())} />
       </div>
       <div className="number__note__main">
         <h3 className="note__title">Số thứ tự được cấp</h3>
-        <h3 className="note__order">2001201</h3>
+        <h3 className="note__order">{orderPopup.id}</h3>
         <h3 className="note__sevice">
-          DV: Khám răng hàm mặt <span>(tại quầy số 1)</span>
+          DV: {orderPopup.serviceName} <span>(tại quầy số 1)</span>
         </h3>
       </div>
       <div className="number__note__footer">
         <div className="number__createdDate">
           <span>Thời gian cấp:</span>
-          <span>09:30 11/10/2021</span>
+          <span>{orderPopup.createdDate}</span>
         </div>
         <div className="number__createdDate">
-          <span>Thời gian cấp:</span>
-          <span>09:30 11/10/2021</span>
+          <span>Hạn sử dụng:</span>
+          <span>{orderPopup.expireDate}</span>
         </div>
       </div>
     </div>

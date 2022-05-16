@@ -1,9 +1,23 @@
 export interface Numbers {
-  id: number;
-  customerName: string;
-  deviceName: string;
-  createdDate: number;
-  expireDate: number;
+  id: string;
+  customerName?: string;
+  serviceName?: string;
+  createdDate: string;
+  expireDate: string;
   status: number;
-  provider: string;
+  deviceName?: string;
+  deviceID?: string;
+serviceID?: string;
+  customerID?: string;
+}
+
+export interface GenerateOrder {
+  id: string;
+  increase: {
+    from: number;
+    to: number;
+  };
+  prefix: number;
+  surfix: number;
+  isReset: boolean;
 }

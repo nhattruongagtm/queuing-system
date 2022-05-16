@@ -1,56 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Space } from "antd";
 import { Numbers } from "../../models/numbers";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
+import {
+  filterNumberList,
+  filterReportList,
+  loadNumberList,
+} from "../../api/numbers";
+import { getServiceById } from "../../api/service";
+import { getDeviceById } from "../../api/device";
+import { FilterReport } from "./Report";
+import { formatDateTime } from "../../utils/dateTime";
 
-type Props = {};
+type Props = {
+  filter: FilterReport;
+};
 
-const ReportList = (props: Props) => {
+const ReportList = ({ filter }: Props) => {
   const navigate = useNavigate();
-  const data: Numbers[] = [
-    {
-      id: 2010001,
-      customerName: "Lê Huỳnh Ái Vân",
-      deviceName: "Khám tim mạch",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 0,
-    },
-    {
-      id: 2010002,
-      customerName: "Huỳnh Ái Vân",
-      deviceName: "Khám sản - Phụ Khoa",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 1,
-    },
-    {
-      id: 2010003,
-      customerName: "Lê Ái Vân",
-      deviceName: "Khám răng hàm mặt",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 2,
-    },
-  ];
+  const [numberList, setNumberList] = useState<Numbers[]>([]);
+  console.log(filter);
+  useEffect(() => {
+    loadNumberList()
+      .then((res) => {
+        let rs = [...res];
+        rs.map(async (item) => {
+          const { customerID, serviceID, deviceID } = item;
+
+          if (customerID && serviceID && deviceID) {
+            const service = await getServiceById(serviceID);
+            const device = await getDeviceById(deviceID);
+            item.deviceName = device?.name;
+            item.serviceName = service?.name;
+            item.customerName = "Huỳnh Ái Vân";
+          }
+        });
+        setNumberList(filterReportList(filter, res));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [filter]);
   const columns = [
     {
       title: "Số thứ tự",
       dataIndex: "stt",
       key: "stt",
-      render: (text: string, record: Numbers) => (
-        <p>{data.indexOf(record) + 1}</p>
-      ),
+      render: (text: string, record: Numbers) => <p>{record.id}</p>,
     },
 
     {
       title: "Tên dịch vụ",
-      dataIndex: "deviceName",
-      key: "deviceName",
+      dataIndex: "serviceName",
+      key: "serviceName",
     },
     {
       title: "Thời gian cấp",
@@ -58,7 +61,7 @@ const ReportList = (props: Props) => {
       dataIndex: "createdDate",
       render: (text: string, record: Numbers) => (
         <div>
-          <span>14:35</span> -<span>14:35</span>
+          <span>{formatDateTime(record.createdDate)}</span>
         </div>
       ),
     },
@@ -79,15 +82,15 @@ const ReportList = (props: Props) => {
     },
     {
       title: "Nguồn cấp",
-      key: "provider",
-      dataIndex: "provider",
+      key: "deviceName",
+      dataIndex: "deviceName",
     },
   ];
 
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={numberList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

@@ -3,8 +3,10 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { Service } from "../models/services";
 import { FilterService } from "../slice/serviceSlice";
@@ -175,3 +177,4 @@ export const filterServiceList = (
   }
   return rs;
 };
+

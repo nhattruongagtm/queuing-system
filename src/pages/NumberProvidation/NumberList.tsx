@@ -3,48 +3,47 @@ import { Table, Tag, Space } from "antd";
 import { Numbers } from "../../models/numbers";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
-
+import { useEffect, useState } from "react";
+import { filterNumberList, loadNumberList } from "../../api/numbers";
+import { filter, getDeviceById } from "../../api/device";
+import { getServiceById } from "../../api/service";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { formatDateTime } from "../../utils/dateTime";
 type Props = {};
 
 const NumberList = (props: Props) => {
   const navigate = useNavigate();
-  const data: Numbers[] = [
-    {
-      id: 2010001,
-      customerName: "Lê Huỳnh Ái Vân",
-      deviceName: "Khám tim mạch",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 0,
-    },
-    {
-      id: 2010002,
-      customerName: "Huỳnh Ái Vân",
-      deviceName: "Khám sản - Phụ Khoa",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 1,
-    },
-    {
-      id: 2010003,
-      customerName: "Lê Ái Vân",
-      deviceName: "Khám răng hàm mặt",
-      createdDate: 1213213445,
-      expireDate: 44545476876,
-      provider: "Kiosk",
-      status: 0,
-    },
-  ];
+  const [numberList, setNumberList] = useState<Numbers[]>([]);
+  const filter = useSelector((state: RootState) => state.numbers.fitler);
+  useEffect(() => {
+    loadNumberList()
+      .then((res) => {
+        let rs = [...res];
+        rs.map(async (item) => {
+          const { customerID, serviceID, deviceID } = item;
+
+          if (customerID && serviceID && deviceID) {
+            const service = await getServiceById(serviceID);
+            const device = await getDeviceById(deviceID);
+            item.deviceName = device?.name;
+            item.serviceName = service?.name;
+            item.customerName = "Huỳnh Ái Vân";
+          }
+        });
+        console.log(rs);
+        setNumberList(filterNumberList(filter, res));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [filter]);
   const columns = [
     {
       title: "Số thứ tự",
-      dataIndex: "stt",
-      key: "stt",
-      render: (text: string, record: Numbers) => (
-        <p>{data.indexOf(record) + 1}</p>
-      ),
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: Numbers) => <p>{record.id}</p>,
     },
     {
       title: "Tên khách hàng",
@@ -53,8 +52,8 @@ const NumberList = (props: Props) => {
     },
     {
       title: "Tên dịch vụ",
-      dataIndex: "deviceName",
-      key: "deviceName",
+      dataIndex: "serviceName",
+      key: "serviceName",
     },
     {
       title: "Thời gian cấp",
@@ -62,7 +61,7 @@ const NumberList = (props: Props) => {
       dataIndex: "createdDate",
       render: (text: string, record: Numbers) => (
         <div>
-          <span>14:35</span> -<span>14:35</span>
+          <span>{formatDateTime(record.createdDate)}</span>
         </div>
       ),
     },
@@ -73,22 +72,27 @@ const NumberList = (props: Props) => {
       render: (status: number) => (
         <div>
           <span
-            className={`dot--status dot--${status === 0 ? "green" : "red"}`}
+            className={`dot--status dot--${
+              status === 0 ? "waiting" : status === 1 ? "used" : "skip"
+            }`}
           ></span>
-          {status === 0 ? "Hoạt động" : "Ngưng hoạt động"}
+          {status === 0 ? "Đang chờ" : status === 1 ? "Đã sử dụng" : "Bỏ qua"}
         </div>
       ),
     },
     {
       title: "Nguồn cấp",
-      key: "provider",
-      dataIndex: "provider",
+      key: "deviceName",
+      dataIndex: "deviceName",
     },
     {
       title: "",
       key: "detail",
       render: (record: Numbers) => (
-        <span className="link" onClick={() => navigate(IRoute.NUMBER_PROVIDATION_DETAIL)}>
+        <span
+          className="link"
+          onClick={() => navigate(`${IRoute.NUMBER_PROVIDATION_DETAIL}/${record.id}`)}
+        >
           Chi tiết
         </span>
       ),
@@ -103,7 +107,7 @@ const NumberList = (props: Props) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={numberList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

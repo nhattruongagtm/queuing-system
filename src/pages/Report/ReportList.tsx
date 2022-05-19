@@ -12,6 +12,9 @@ import { getServiceById } from "../../api/service";
 import { getDeviceById } from "../../api/device";
 import { FilterReport } from "./Report";
 import { formatDateTime } from "../../utils/dateTime";
+import { loadReportList } from "../../slice/reportSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 type Props = {
   filter: FilterReport;
@@ -19,24 +22,13 @@ type Props = {
 
 const ReportList = ({ filter }: Props) => {
   const navigate = useNavigate();
-  const [numberList, setNumberList] = useState<Numbers[]>([]);
-  console.log(filter);
+  const dispatch = useDispatch();
+  const numberList = useSelector((state: RootState) => state.report.reportList);
   useEffect(() => {
     loadNumberList()
       .then((res) => {
-        let rs = [...res];
-        rs.map(async (item) => {
-          const { customerID, serviceID, deviceID } = item;
-
-          if (customerID && serviceID && deviceID) {
-            const service = await getServiceById(serviceID);
-            const device = await getDeviceById(deviceID);
-            item.deviceName = device?.name;
-            item.serviceName = service?.name;
-            item.customerName = "Huỳnh Ái Vân";
-          }
-        });
-        setNumberList(filterReportList(filter, res));
+        const list = filterReportList(filter, res);
+        dispatch(loadReportList(list));
       })
       .catch((e) => {
         console.log(e);

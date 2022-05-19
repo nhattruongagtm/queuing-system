@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation } from "react-router";
 import { createDummyNumber } from "./api/numbers";
+import { getRoleGroup, loadRoleList } from "./api/role";
 import { createDummyService } from "./api/service";
 import { IRoute } from "./constant/routes";
 import UtilPage from "./pages";
@@ -15,7 +16,8 @@ function App() {
   useEffect(() => {
     // createDummyData(10);
     // createDummyService(10);
-    // createDummyNumber(10)  
+    // createDummyNumber(10)
+    
   }, []);
 
   return (

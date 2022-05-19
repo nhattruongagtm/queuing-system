@@ -1,9 +1,12 @@
 export interface Account {
-  id: number;
+  id: string;
   username: string;
   fullName: string;
   phone: string;
   email: string;
   role: string;
+  roleName?: string;
   status: number;
+  password: string;
+  rePassword: string;
 }

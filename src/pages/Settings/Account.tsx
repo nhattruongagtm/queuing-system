@@ -5,12 +5,15 @@ import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import AccountList from "./AccountList";
 import RoleList from "./RoleList";
+import { useDispatch } from "react-redux";
+import { resetEditAccount } from "../../slice/accountSlice";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
 const { Search } = Input;
 
 const Account = (props: Props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <Layout className="dashbad services number__provide">
@@ -42,12 +45,15 @@ const Account = (props: Props) => {
                 </div>
               </div>
             </div>
-            <AccountList/>
+            <AccountList />
           </div>
           <div className="devices__tags">
             <div
               className="devices__tags__add account__tags"
-              onClick={() => navigate(IRoute.SETTINGS_ADD_ACCOUNT)}
+              onClick={() => {
+                navigate(IRoute.SETTINGS_ADD_ACCOUNT);
+                dispatch(resetEditAccount())
+              }}
             >
               <img src="./imgs/add.svg" alt="" />
               Thêm tài khoản

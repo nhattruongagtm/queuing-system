@@ -1,5 +1,11 @@
 import { Input, Layout, Select, Tag, TagProps, Checkbox } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { Set } from "typescript";
+import { createRole, getRoleGroup } from "../../api/role";
+import { IRoute } from "../../constant/routes";
+import { Role, RoleGroup } from "../../models/role";
+import FunctionGroup from "./FunctionGroup";
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -14,40 +20,85 @@ interface tagProps {
   onClose: () => void;
 }
 
-function tagRender(props: any) {
-  const { label, value, closable, onClose } = props;
-  const onPreventMouseDown = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-  return (
-    <Tag
-      color={"#FFAC6A"}
-      onMouseDown={onPreventMouseDown}
-      closable={closable}
-      onClose={onClose}
-      style={{ marginRight: 3 }}
-    >
-      {label}
-    </Tag>
-  );
-}
-const options = [
-  { value: "Khám tim mạch" },
-  { value: "Khám sản phụ khoa" },
-  { value: "Khám răng hàm mặt" },
-  { value: "Khám tai mũi họng" },
-  { value: "Khám tổng quát" },
-];
-
 const AddRole = (props: Props) => {
+  const navigate = useNavigate();
+  const [check, setCheck] = useState<string[]>([]);
+  const [roles, setRoles] = useState<RoleGroup[]>([]);
+  const [role, setRole] = useState<Role>({
+    id: "-1",
+    name: "",
+    desc: "",
+    numberOfUsers: 10,
+  });
+
+  useEffect(() => {
+    const loadRoles = async () => {
+      const rs = await getRoleGroup();
+      setRoles(rs);
+    };
+    loadRoles();
+  }, []);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setRole({
+      ...role,
+      [name]: value,
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (role.name.trim() === "" && role.desc.trim() === "") {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+    } else {
+      console.log(role);
+      try {
+        await createRole(role);
+        alert("Thêm vai trò thành công!");
+        setRole({
+          id: "-1",
+          name: "",
+          desc: "",
+          numberOfUsers: 10,
+        });
+      } catch (error) {
+        alert("ERROR");
+      }
+    }
+  };
+  const handleGetValue = (rs: string[]) => {
+    const newCheckList = [...check, ...rs];
+    const checkList = new Set(newCheckList);
+    if (rs.length === 0) {
+      setCheck([]);
+    } else {
+      setCheck([...check, ...rs]);
+    }
+    setRole({
+      ...role,
+      permission:
+        rs.length === 0
+          ? []
+          : Array.from(checkList).map((item) => {
+              return {
+                id: item + "",
+                name: "",
+              };
+            }),
+    });
+  };
+
   return (
     <Layout className="add__device">
       <Content className="dasbard__content">
         <h3 className="dashboard__content__title title-1">Danh sách vai trò</h3>
-        <div className="add__device__form role__manager">
+        <form
+          className="add__device__form role__manager"
+          onSubmit={handleSubmit}
+        >
           <div className="add__device__main">
             <div className="device__title title">Thông tin vai trò</div>
             <div className="device__inputs role__main">
@@ -56,13 +107,24 @@ const AddRole = (props: Props) => {
                   <h4 className="device__input__title">
                     Tên vai trò <span>*</span>
                   </h4>
-                  <Input placeholder="Nhập tên vai trò" />
+                  <Input
+                    placeholder="Nhập tên vai trò"
+                    value={role.name}
+                    name="name"
+                    onChange={handleChange}
+                  />
                 </div>
                 <div className="device__input__which">
                   <h4 className="device__input__title">
                     Mô tả: <span>*</span>
                   </h4>
-                  <TextArea rows={6} placeholder="Nhập mô tả" />
+                  <TextArea
+                    rows={6}
+                    placeholder="Nhập mô tả"
+                    value={role.desc}
+                    name="desc"
+                    onChange={handleChange}
+                  />
                 </div>
                 <p className="device__notify">
                   <span>*</span> Là trường thông tin bắc buộc
@@ -75,57 +137,12 @@ const AddRole = (props: Props) => {
                   </h4>
                   <div className="role__list">
                     <div className="role__list__scroll">
-                      <div className="role__list__item">
-                        <h3 className="title">Nhóm chức năng A</h3>
-                        <div className="item__list">
-                          <div className="item__list__item">
-                            <Checkbox>Tất cả</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng x</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng y</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng z</Checkbox>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="role__list__item">
-                        <h3 className="title">Nhóm chức năng B</h3>
-                        <div className="item__list">
-                          <div className="item__list__item">
-                            <Checkbox>Tất cả</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng x</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng y</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng z</Checkbox>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="role__list__item">
-                        <h3 className="title">Nhóm chức năng C</h3>
-                        <div className="item__list">
-                          <div className="item__list__item">
-                            <Checkbox>Tất cả</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng x</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng y</Checkbox>
-                          </div>
-                          <div className="item__list__item">
-                            <Checkbox>Chức năng z</Checkbox>
-                          </div>
-                        </div>
-                      </div>
+                      {roles.map((item) => (
+                        <FunctionGroup
+                          role={item}
+                          onGetValue={handleGetValue}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -133,10 +150,18 @@ const AddRole = (props: Props) => {
             </div>
           </div>
           <div className="add__device__actions">
-            <button className="button button--outline">Hủy bỏ</button>
-            <button className="button">Thêm thiết bị</button>
+            <button
+              className="button button--outline"
+              type="button"
+              onClick={() => navigate(IRoute.SETTINGS_ROLE)}
+            >
+              Hủy bỏ
+            </button>
+            <button className="button" type="submit">
+              Thêm vai trò
+            </button>
           </div>
-        </div>
+        </form>
       </Content>
     </Layout>
   );

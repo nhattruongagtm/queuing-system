@@ -1,46 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Space } from "antd";
 import { Numbers } from "../../models/numbers";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import { Role } from "../../models/role";
+import { filterRoletList, loadRoleList } from "../../api/role";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 type Props = {};
 
 const ReportList = (props: Props) => {
   const navigate = useNavigate();
-  const data: Role[] = [
-    {
-      id: 1,
-      name: "Bác sĩ",
-      numberOfUsers: 6,
-      desc: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-      id: 2,
-      name: "Kế toán",
-      numberOfUsers: 6,
-      desc: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-      id: 3,
-      name: "Lễ tân",
-      numberOfUsers: 5,
-      desc: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-      id: 4,
-      name: "Quản lý",
-      numberOfUsers: 15,
-      desc: "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-  ];
+  const [roleList, setRoleList] = useState<Role[]>([]);
+  const filter = useSelector((state: RootState) => state.role.filter);
+
+  useEffect(() => {
+    loadRoleList()
+      .then((res) => {
+        setRoleList(filterRoletList(filter, res));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [filter]);
+
   const columns = [
     {
       title: "Tên vai trò",
       dataIndex: "name",
       key: "name",
-      render: (text: string, record: Role) => <p>{data.indexOf(record) + 1}</p>,
+      render: (text: string, record: Role) => <p>{record.name}</p>,
     },
 
     {
@@ -57,9 +47,12 @@ const ReportList = (props: Props) => {
       title: "",
       key: "update",
       render: (record: Role) => (
-        <span className="link" onClick={() => navigate(IRoute.SETTINGS_ADD_ROLE)}>
+        <span
+          className="link"
+          onClick={() => navigate(IRoute.SETTINGS_ADD_ROLE)}
+        >
           Cập nhật
-        </span>  
+        </span>
       ),
     },
   ];
@@ -67,7 +60,7 @@ const ReportList = (props: Props) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={roleList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

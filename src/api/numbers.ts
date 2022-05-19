@@ -13,7 +13,9 @@ import { Service } from "../models/services";
 import { FilterNumber } from "../pages/NumberProvidation/NumberProvidation";
 import { FilterReport } from "../pages/Report/Report";
 import { FilterService } from "../slice/serviceSlice";
+import { getDeviceById } from "./device";
 import { db } from "./fbConfig";
+import { getServiceById } from "./service";
 
 export interface FilterParams {
   activeStatus: number;
@@ -61,13 +63,19 @@ export const loadNumberList = (): Promise<Numbers[]> => {
     try {
       const numberRef = await getDocs(collection(db, NUMBERS_DOCS));
 
-      numberRef.forEach((doc) => {
+      numberRef.forEach(async (doc) => {
         if (doc.exists()) {
           const data = doc.data() as Numbers;
+
+          const service = await getServiceById(data.serviceID as string);
+          const device = await getDeviceById(data.deviceID as string);
 
           rs.push({
             ...data,
             id: doc.id,
+            serviceName: service ? service.name : "",
+            deviceName: device ? device.name : "",
+            customerName: "Huỳnh Ái Vân",
           });
         }
         if (rs.length === numberRef.size) {

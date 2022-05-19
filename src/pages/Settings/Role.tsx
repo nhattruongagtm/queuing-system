@@ -1,9 +1,12 @@
 import { CaretRightOutlined } from "@ant-design/icons";
 import { DatePicker, Input, Layout, Select } from "antd";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import RoleList from "./RoleList";
+import { RootState } from "../../store";
+import { filterRole } from "../../slice/roleSlice";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
@@ -11,6 +14,8 @@ const { Search } = Input;
 
 const Role = (props: Props) => {
   const navigate = useNavigate();
+  const filter = useSelector((state: RootState) => state.role.filter);
+  const dispatch = useDispatch();
   return (
     <Layout className="dashbad services number__provide">
       <Content className="dasbard__content">
@@ -24,7 +29,13 @@ const Role = (props: Props) => {
                 <div className="devices__search__child">
                   <p className="devices__search__title">Từ khóa</p>
                   <div className="devices__search__input">
-                    <Input />
+                    <Input
+                      placeholder="Tìm kiếm theo tên"
+                      value={filter.search}
+                      onChange={(e) =>
+                        dispatch(filterRole({ search: e.target.value }))
+                      }
+                    />
                     {/* <SearchOutlined /> */}
                   </div>
                 </div>
@@ -46,5 +57,4 @@ const Role = (props: Props) => {
     </Layout>
   );
 };
-
 export default Role;

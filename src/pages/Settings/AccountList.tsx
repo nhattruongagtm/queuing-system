@@ -1,52 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tag, Space } from "antd";
 import { Numbers } from "../../models/numbers";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import { Account } from "../../models/account";
+import { loadAccountList } from "../../api/account";
+import { useDispatch } from "react-redux";
+import { updateAccount } from "../../slice/accountSlice";
 
 type Props = {};
 
 const AccountList = (props: Props) => {
   const navigate = useNavigate();
-  const data: Account[] = [
-    {
-      id: 1,
-      username: "tuyetnguyen@12",
-      fullName: "Nguyen Văn A",
-      role: "Bác sĩ",
-      phone: "0919256712",
-      email: "tuyetnguyen123@gmail.com",
-      status: 1,
-    },
-    {
-      id: 1,
-      username: "tuyetnguyen@87",
-      fullName: "Nguyen Văn B",
-      role: "Bác sĩ",
-      phone: "0919256712",
-      email: "tuyetnguyen123@gmail.com",
-      status: 1,
-    },
-    {
-      id: 1,
-      username: "tuyetnguyen@47",
-      fullName: "Nguyen Văn C",
-      role: "Kế toán",
-      phone: "0919256712",
-      email: "tuyetnguyen123@gmail.com",
-      status: 0,
-    },
-    {
-      id: 1,
-      username: "tuyetnguyen@72",
-      fullName: "Nguyen Văn D",
-      role: "Bác sĩ",
-      phone: "0919256712",
-      email: "tuyetnguyen123@gmail.com",
-      status: 1,
-    },
-  ];
+  const dispatch = useDispatch();
+  const [accountList, setAccountList] = useState<Account[]>([]);
+  useEffect(() => {
+    loadAccountList()
+      .then((res) => {
+        setAccountList(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+  
   const columns = [
     {
       title: "Tên đăng nhập",
@@ -91,7 +68,13 @@ const AccountList = (props: Props) => {
       title: "",
       key: "update",
       render: (record: Account) => (
-        <span className="link" onClick={() => navigate(IRoute.SETTINGS_ADD_ACCOUNT)}>
+        <span
+          className="link"
+          onClick={() => {
+            navigate(IRoute.SETTINGS_ADD_ACCOUNT);
+            dispatch(updateAccount(record));
+          }}
+        >
           Cập nhật
         </span>
       ),
@@ -101,7 +84,7 @@ const AccountList = (props: Props) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={accountList}
       pagination={{ pageSize: 6 }}
       className="device__list"
     />

@@ -7,7 +7,7 @@ export interface Numbers {
   status: number;
   deviceName?: string;
   deviceID?: string;
-serviceID?: string;
+  serviceID?: string;
   customerID?: string;
 }
 

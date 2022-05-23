@@ -16,7 +16,7 @@ export interface FilterParams {
   search: string;
 }
 export type DataList<T> = T[];
-const DEVICE_DOCS = "devices";
+export const DEVICE_DOCS = "devices";
 const randomDeviceList = () => {
   const deviceList = [
     "Khám tim mạch",
@@ -141,7 +141,7 @@ export const updateDevice = (device: Device): Promise<boolean> => {
 };
 export const filter = (params: FilterParams, list: DataList<Device>) => {
   const { activeStatus, connectStatus, search } = params;
-  console.log(params)
+  console.log(params);
   let rs = [...list];
   if (activeStatus && activeStatus !== -1) {
     rs = rs.filter((item) => item.activeStatus === activeStatus);

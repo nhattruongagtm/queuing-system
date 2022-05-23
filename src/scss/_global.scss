@@ -82,7 +82,10 @@ input {
 }
 .ant-pagination {
   flex-grow: 1;
-  .ant-pagination-item,.ant-pagination-next,.ant-pagination-prev,.ant-pagination-next {
+  .ant-pagination-item,
+  .ant-pagination-next,
+  .ant-pagination-prev,
+  .ant-pagination-next {
     background-color: transparent;
     border-color: transparent;
     border-radius: 4px;
@@ -167,4 +170,16 @@ input {
 .text-content {
   color: $text-color;
   font-weight: 400;
+}
+
+.alta-loading {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 165px;
+  img {
+    width: 80px;
+    height: 80px;
+  }
 }

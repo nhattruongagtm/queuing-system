@@ -1,10 +1,12 @@
 import { Input, Layout, Select, Tag, TagProps, Checkbox } from "antd";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 import { Set } from "typescript";
-import { createRole, getRoleGroup } from "../../api/role";
+import { createRole, getRoleGroup, updateRole } from "../../api/role";
 import { IRoute } from "../../constant/routes";
 import { Role, RoleGroup } from "../../models/role";
+import { RootState } from "../../store";
 import FunctionGroup from "./FunctionGroup";
 const { Content } = Layout;
 const { Option } = Select;
@@ -24,12 +26,19 @@ const AddRole = (props: Props) => {
   const navigate = useNavigate();
   const [check, setCheck] = useState<string[]>([]);
   const [roles, setRoles] = useState<RoleGroup[]>([]);
+  const edit = useSelector((state: RootState) => state.role.edit);
   const [role, setRole] = useState<Role>({
     id: "-1",
     name: "",
     desc: "",
     numberOfUsers: 10,
   });
+  const id = useParams().id;
+
+  useEffect(() => {
+    setRole(edit);
+    edit.permission && setCheck(edit.permission.map((item) => item.id));
+  }, [edit]);
 
   useEffect(() => {
     const loadRoles = async () => {
@@ -54,18 +63,29 @@ const AddRole = (props: Props) => {
     if (role.name.trim() === "" && role.desc.trim() === "") {
       alert("Vui lòng nhập đầy đủ thông tin!");
     } else {
-      console.log(role);
-      try {
-        await createRole(role);
-        alert("Thêm vai trò thành công!");
-        setRole({
-          id: "-1",
-          name: "",
-          desc: "",
-          numberOfUsers: 10,
-        });
-      } catch (error) {
-        alert("ERROR");
+      if (edit.id !== "") {
+        // update
+        try {
+          updateRole(role);
+          alert("Cập nhật vai trò thành công!");
+        } catch (error) {
+          console.log(e);
+        }
+      } else {
+        // create
+        console.log(role);
+        try {
+          await createRole(role);
+          alert("Thêm vai trò thành công!");
+          setRole({
+            id: "-1",
+            name: "",
+            desc: "",
+            numberOfUsers: 10,
+          });
+        } catch (error) {
+          alert("ERROR");
+        }
       }
     }
   };
@@ -158,7 +178,7 @@ const AddRole = (props: Props) => {
               Hủy bỏ
             </button>
             <button className="button" type="submit">
-              Thêm vai trò
+              {edit.id !== "" ? "Cập nhật" : "Thêm vai trò  "}
             </button>
           </div>
         </form>

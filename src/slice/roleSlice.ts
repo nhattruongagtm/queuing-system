@@ -17,7 +17,7 @@ const initialState: RoleSlice = {
   roleList: [],
   edit: {
     desc: "",
-    id: "-1",
+    id: "",
     name: "",
   },
   filter: {

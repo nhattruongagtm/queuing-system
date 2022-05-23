@@ -5,6 +5,10 @@ import { Route, Routes, useLocation } from "react-router";
 import { createDummyNumber } from "./api/numbers";
 import { getRoleGroup, loadRoleList } from "./api/role";
 import { createDummyService } from "./api/service";
+import {
+  getNumberProvidationByMonth,
+  getStatisticsByNumbers,
+} from "./api/statistic";
 import { IRoute } from "./constant/routes";
 import UtilPage from "./pages";
 import Auth from "./pages/Auth/Login/Auth";
@@ -17,7 +21,13 @@ function App() {
     // createDummyData(10);
     // createDummyService(10);
     // createDummyNumber(10)
-    
+    getStatisticsByNumbers()
+      .then((res) => {
+        console.log("numbers: ", res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   return (

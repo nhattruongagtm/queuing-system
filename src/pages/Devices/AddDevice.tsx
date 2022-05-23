@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { createDevice, updateDevice } from "../../api/device";
+import { createLog } from "../../api/log";
 import { Device } from "../../models/device";
+import { Log } from "../../models/log";
 import { createDevice as createDeviceStore } from "../../slice/deviceSlice";
 import { RootState } from "../../store";
 const { Content } = Layout;
@@ -117,6 +119,18 @@ const AddDevice = (props: Props) => {
       checkEmpty() &&
         createDevice(device)
           .then((res) => {
+            const log: Log = {
+              username: "nhattruongagtm",
+              dateTime: new Date().toLocaleString().split(", ").join(" "),
+              ip: "192.168.1.5",
+              action: 0,
+              actor: input.id,
+            };
+            createLog(log)
+              .then((res) => {})
+              .catch((e) => {
+                console.log(e);
+              });
             if (res) {
               alert("Thêm thiết bị thành công!");
             } else {
@@ -132,6 +146,18 @@ const AddDevice = (props: Props) => {
       updateDevice(input)
         .then((res) => {
           if (res) {
+            const log: Log = {
+              username: "nhattruongagtm",
+              dateTime: new Date().toLocaleString().split(", ").join(" "),
+              ip: "192.168.1.5",
+              action: 1,
+              actor: input.id,
+            };
+            createLog(log)
+              .then((res) => {})
+              .catch((e) => {
+                console.log(e);
+              });
             alert("Cập nhật thiết bị thành công!");
           } else {
             alert("Cập nhật thông tin thất bại!");
@@ -278,7 +304,11 @@ const AddDevice = (props: Props) => {
             </p>
           </div>
           <div className="add__device__actions">
-            <button className="button button--outline" type="button" onClick={()=>navigate(-1)}>
+            <button
+              className="button button--outline"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
               Hủy bỏ
             </button>
             <button className="button" type="submit">

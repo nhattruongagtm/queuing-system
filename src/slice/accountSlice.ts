@@ -47,7 +47,7 @@ const numberSlice = createSlice({
     resetEditAccount: (state) => {
       state.edit = initialState.edit;
     },
-    filterAccount: (state, action: PayloadAction<FilterNumber>) => {
+    filterAccount: (state, action: PayloadAction<FilterAccount>) => {
       state.fitler = action.payload;
     },
   },

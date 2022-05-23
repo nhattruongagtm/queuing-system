@@ -24,7 +24,7 @@ export interface FilterParams {
 }
 
 export type DataList<T> = T[];
-const NUMBERS_DOCS = "numbers";
+export const NUMBERS_DOCS = "numbers";
 
 export const checkNumber = (id: string): Promise<boolean> => {
   return new Promise(async (resolve, reject) => {

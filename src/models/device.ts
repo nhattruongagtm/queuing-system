@@ -8,4 +8,5 @@ export interface Device {
   type: string;
   username: string;
   password: string;
+  createdDate? : string;
 }

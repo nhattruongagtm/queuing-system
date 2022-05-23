@@ -4,25 +4,28 @@ import { Numbers } from "../../models/numbers";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import { Account } from "../../models/account";
-import { loadAccountList } from "../../api/account";
-import { useDispatch } from "react-redux";
+import { filterAccountList, loadAccountList } from "../../api/account";
+import { useDispatch, useSelector } from "react-redux";
 import { updateAccount } from "../../slice/accountSlice";
+import { RootState } from "../../store";
 
 type Props = {};
 
 const AccountList = (props: Props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const filter = useSelector((state: RootState)=>state.account.fitler);
   const [accountList, setAccountList] = useState<Account[]>([]);
   useEffect(() => {
     loadAccountList()
       .then((res) => {
-        setAccountList(res);
+        // setAccountList(res)
+        setAccountList(filterAccountList(filter,res));
       })
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, [filter]);
   
   const columns = [
     {

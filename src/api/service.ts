@@ -19,14 +19,14 @@ export interface FilterParams {
 }
 
 export type DataList<T> = T[];
-const SERVICE_DOCS = "services";
+export const SERVICE_DOCS = "services";
 const randomServiceList = () => {
   const serviceList = [
     "Khám tim mạch",
     "Khám Sản - Phụ khoa",
     "Khám răng hàm mặt, tai mũi họng",
     "Khám hô hấp",
-    "Khám tổng quát",
+    "Khám tổng quát", 
   ];
   const randomNumber = Math.floor(Math.random() * serviceList.length);
   const rs = serviceList.slice(0, randomNumber);

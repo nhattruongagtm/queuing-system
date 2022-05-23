@@ -8,6 +8,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { Account } from "../models/account";
+import { FilterAccount } from "../slice/accountSlice";
+import { DataList } from "./device";
 import { db } from "./fbConfig";
 const ACCOUNT_DOCS = "accounts";
 
@@ -68,4 +70,21 @@ export const getAccountById = (id: number): Promise<Account> => {
       reject(error);
     }
   });
+};
+export const filterAccountList = (
+  params: FilterAccount,
+  list: DataList<Account>
+) => {
+  let rs: Account[] = [...list];
+  const { search, status } = params;
+
+  if (search.trim() !== "") {
+    rs = rs.filter((item) => item.fullName.indexOf(search) !== -1);
+  }
+
+  if(status !== -1){
+    return rs.filter((item) => (item.status === status));
+  }
+
+  return rs;
 };

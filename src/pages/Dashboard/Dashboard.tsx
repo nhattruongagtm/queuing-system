@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 import DashboardData from "./DashboardData";
 import DashboardChart from "./DashboardChart";
 import DatePicker from "../../components/DatePicker/DatePicker";
+import { Statistic } from "../../models/statistic";
+import { getStatisticsByNumbers } from "../../api/statistic";
 interface Props {}
 
 const { Content, Sider } = Layout;
 
 const Dashboard = (props: Props) => {
+  
   return (
     <Layout className="dashboard">
       <Content className="dashboard__content">
@@ -102,7 +105,7 @@ const Dashboard = (props: Props) => {
               </div>
             </div>
           </div>
-          <DatePicker/>
+          <DatePicker />
         </div>
       </Sider>
     </Layout>

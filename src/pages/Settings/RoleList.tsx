@@ -5,13 +5,15 @@ import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import { Role } from "../../models/role";
 import { filterRoletList, loadRoleList } from "../../api/role";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { updateRole } from "../../slice/roleSlice";
 
 type Props = {};
 
 const ReportList = (props: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [roleList, setRoleList] = useState<Role[]>([]);
   const filter = useSelector((state: RootState) => state.role.filter);
 
@@ -49,7 +51,10 @@ const ReportList = (props: Props) => {
       render: (record: Role) => (
         <span
           className="link"
-          onClick={() => navigate(IRoute.SETTINGS_ADD_ROLE)}
+          onClick={() => {
+            navigate(`${IRoute.SETTINGS_ADD_ROLE}`);
+            dispatch(updateRole(record));
+          }}
         >
           Cập nhật
         </span>

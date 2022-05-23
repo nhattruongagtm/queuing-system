@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import RoleList from "./RoleList";
 import { RootState } from "../../store";
-import { filterRole } from "../../slice/roleSlice";
+import { filterRole, resetEditRole } from "../../slice/roleSlice";
 interface Props {}
 const { Content, Sider } = Layout;
 const { Option } = Select;
@@ -46,7 +46,10 @@ const Role = (props: Props) => {
           <div className="devices__tags">
             <div
               className="devices__tags__add"
-              onClick={() => navigate(IRoute.SETTINGS_ADD_ROLE)}
+              onClick={() => {
+                navigate(IRoute.SETTINGS_ADD_ROLE);
+                dispatch(resetEditRole());
+              }}
             >
               <img src="./imgs/add.svg" alt="" />
               Thêm vai trò

@@ -2,7 +2,9 @@ import { Checkbox, Input, Layout, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { createLog } from "../../api/log";
 import { createService, updateService } from "../../api/service";
+import { Log } from "../../models/log";
 import { Service } from "../../models/services";
 import { RootState } from "../../store";
 const { Content } = Layout;
@@ -42,6 +44,18 @@ const AddService = (props: Props) => {
         updateService(input)
           .then((res) => {
             if (res) {
+              const log: Log = {
+                username: "nhattruongagtm",
+                dateTime: new Date().toLocaleString().split(", ").join(" "),
+                ip: "192.168.1.5",
+                action: 1,
+                actor: input.id,
+              };
+              createLog(log)
+                .then((res) => {})
+                .catch((e) => {
+                  console.log(e);
+                });
               alert("Cập nhật dịch vụ thành công!");
             } else {
               alert("Cập nhật dịch vụ thất bại!");
@@ -56,6 +70,18 @@ const AddService = (props: Props) => {
         createService(input)
           .then((res) => {
             if (res) {
+              const log: Log = {
+                username: "nhattruongagtm",
+                dateTime: new Date().toLocaleString().split(", ").join(" "),
+                ip: "192.168.1.5",
+                action: 0,
+                actor: input.id,
+              };
+              createLog(log)
+                .then((res) => {})
+                .catch((e) => {
+                  console.log(e);
+                });
               alert("Thêm dịch vụ thành công!");
             } else {
               alert("Thêm dịch vụ thất bại!");

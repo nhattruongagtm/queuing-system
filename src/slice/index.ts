@@ -7,6 +7,7 @@ import numberSlice from "./numberSlice";
 import reportSlice from "./reportSlice";
 import roleSlice from "./roleSlice";
 import accountSlice from "./accountSlice";
+import logSlice from "./logSlice";
 export const rootReducer = combineReducers({
   auth: authSlice,
   devices: deviceSlice,
@@ -16,4 +17,5 @@ export const rootReducer = combineReducers({
   report: reportSlice,
   role: roleSlice,
   account: accountSlice,
+  log: logSlice
 });

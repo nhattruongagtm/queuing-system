@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { login } from "../../../api/auth";
 import { IRoute } from "../../../constant/routes";
+import { ACCESS_TOKEN } from "../../../constant/token";
 import { updateState } from "../../../slice/AuthSlice";
 
 interface Props {}
@@ -38,6 +39,11 @@ const LoginForm = (props: Props) => {
       login(username, password)
         .then((res) => {
           if (res) {
+            localStorage.setItem(
+              ACCESS_TOKEN,
+              JSON.stringify({ ...res, password: "**************************" })
+            );
+
             alert("Đăng nhập thành công!");
             navigate(IRoute.DASHBOARD);
           } else {

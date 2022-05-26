@@ -3,14 +3,48 @@ import { Layout } from "antd";
 import DashboardData from "./DashboardData";
 import DashboardChart from "./DashboardChart";
 import DatePicker from "../../components/DatePicker/DatePicker";
-import { Statistic } from "../../models/statistic";
-import { getStatisticsByNumbers } from "../../api/statistic";
+import { StatisticDevice } from "../../models/statistic";
+import {
+  getStatisticsByNumbers,
+  getDevicesByMonth,
+  getNumberByMonth,
+  getServiceByMonth,
+} from "../../api/statistic";
 interface Props {}
 
 const { Content, Sider } = Layout;
 
 const Dashboard = (props: Props) => {
-  
+  const [deviceStatistic, setDeviceStatistic] = useState<StatisticDevice>();
+  const [seriviceStatistic, setServiceStatistic] = useState<StatisticDevice>();
+  const [numberStatistic, setNumberStatistic] = useState<StatisticDevice>();
+
+  useEffect(() => {
+    getDevicesByMonth(new Date().getMonth() + 1)
+      .then((res) => {
+        console.log(res);
+        setDeviceStatistic(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    getServiceByMonth(new Date().getMonth() + 1)
+      .then((res) => {
+        console.log(res);
+        setServiceStatistic(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    getNumberByMonth(new Date().getMonth() + 1)
+      .then((res) => {
+        console.log(res);
+        setNumberStatistic(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
   return (
     <Layout className="dashboard">
       <Content className="dashboard__content">
@@ -22,88 +56,107 @@ const Dashboard = (props: Props) => {
         <h3 className="dashboard__sider__title title-1">Tổng quan</h3>
         <div className="dashboard__sider__status">
           <div className="sider__status__item devices shadow">
-            <div className="sider__status__chart">
-              <span>90%</span>
-            </div>
-            <div className="sider__status__numbers">
-              <h3>4.221</h3>
-              <h3>
-                <img src="./imgs/monitor.svg" alt="" />
-                <span>Thiết bị</span>
-              </h3>
-            </div>
-            <div className="sider__status__content">
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Đang hoạt động</span>
-                </p>
-                <span>3.799</span>
-              </div>
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Ngưng hoạt động</span>
-                </p>
-                <span>21</span>
-              </div>
-            </div>
+            {deviceStatistic && (
+              <>
+                <div className="sider__status__chart">
+                  <span>90%</span>
+                </div>
+                <div className="sider__status__numbers">
+                  <h3>{deviceStatistic?.total}</h3>
+                  <h3>
+                    <img src="./imgs/monitor.svg" alt="" />
+                    <span>Thiết bị</span>
+                  </h3>
+                </div>
+                <div className="sider__status__content">
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Đang hoạt động</span>
+                    </p>
+                    <span>{deviceStatistic?.active}</span>
+                  </div>
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Ngưng hoạt động</span>
+                    </p>
+                    <span>{deviceStatistic?.inactive}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="sider__status__item services shadow">
-            <div className="sider__status__chart">
-              <span>90%</span>
-            </div>
-            <div className="sider__status__numbers">
-              <h3>4.221</h3>
-              <h3>
-                <img src="./imgs/monitor.svg" alt="" />
-                <span>Thiết bị</span>
-              </h3>
-            </div>
-            <div className="sider__status__content">
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Đang hoạt động</span>
-                </p>
-                <span>3.799</span>
-              </div>
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Ngưng hoạt động</span>
-                </p>
-                <span>21</span>
-              </div>
-            </div>
+            {seriviceStatistic && (
+              <>
+                <div className="sider__status__chart">
+                  <span>90%</span>
+                </div>
+                <div className="sider__status__numbers">
+                  <h3>{seriviceStatistic.total}</h3>
+                  <h3>
+                    <img src="./imgs/services.svg" alt="" />
+                    <span>Dịch vụ</span>
+                  </h3>
+                </div>
+                <div className="sider__status__content">
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Đang hoạt động</span>
+                    </p>
+                    <span>{seriviceStatistic.active}</span>
+                  </div>
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Ngưng hoạt động</span>
+                    </p>
+                    <span>{seriviceStatistic.inactive}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="sider__status__item numbers shadow">
-            <div className="sider__status__chart">
-              <span>90%</span>
-            </div>
-            <div className="sider__status__numbers">
-              <h3>4.221</h3>
-              <h3>
-                <img src="./imgs/monitor.svg" alt="" />
-                <span>Thiết bị</span>
-              </h3>
-            </div>
-            <div className="sider__status__content">
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Đang hoạt động</span>
-                </p>
-                <span>3.799</span>
-              </div>
-              <div className="status__content__item">
-                <p>
-                  <span className="dot"></span>
-                  <span>Ngưng hoạt động</span>
-                </p>
-                <span>21</span>
-              </div>
-            </div>
+            {numberStatistic && (
+              <>
+                <div className="sider__status__chart">
+                  <span>90%</span>
+                </div>
+                <div className="sider__status__numbers">
+                  <h3>{numberStatistic.total}</h3>
+                  <h3>
+                    <img src="./imgs/number.svg" alt="" />
+                    <span>Cấp số</span>
+                  </h3>
+                </div>
+                <div className="sider__status__content number">
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Đã sử dụng</span>
+                    </p>
+                    <span>{numberStatistic.active}</span>
+                  </div>
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Đang chờ</span>
+                    </p>
+                    <span>{numberStatistic.inactive}</span>
+                  </div>
+                  <div className="status__content__item">
+                    <p>
+                      <span className="dot"></span>
+                      <span>Bỏ qua</span>
+                    </p>
+                    <span>{numberStatistic.skip}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <DatePicker />
         </div>

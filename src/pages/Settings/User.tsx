@@ -19,9 +19,6 @@ const User = (props: Props) => {
   return (
     <Layout className="dashbad services number__provide">
       <Content className="dasbard__content">
-        <h3 className="dashboard__content__title title-1">
-          Danh sách thiết bị
-        </h3>
         <div className="devices__main">
           <div className="devices__list">
             <div className="devices__content__selects provide__selects user__list">

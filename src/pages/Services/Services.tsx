@@ -22,7 +22,7 @@ const Services = (props: Props) => {
     <Layout className="dashbad services">
       <Content className="dasbard__content">
         <h3 className="dashboard__content__title title-1">
-          Danh sách thiết bị
+          Quản lý dịch vụ
         </h3>
         <div className="devices__main">
           <div className="devices__list">

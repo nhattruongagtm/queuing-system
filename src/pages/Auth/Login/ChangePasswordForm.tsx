@@ -1,21 +1,28 @@
 import { Input } from "antd";
+import md5 from "md5";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../../api/auth";
+import { UserAccount } from "../../../models/user";
 import { updateState } from "../../../slice/AuthSlice";
+import { RootState } from "../../../store";
 
-interface Props {}
+interface Props {
+  account: UserAccount | undefined;
+}
 interface LoginInput {
   password: string;
   retype: string;
 }
 
-const ChangePasswordForm = (props: Props) => {
+const ChangePasswordForm = ({ account }: Props) => {
   const initialInput: LoginInput = {
     password: "",
     retype: "",
   };
   const [input, setInput] = useState<LoginInput>(initialInput);
   const [error, setError] = useState<boolean>(false);
+  const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,12 +54,22 @@ const ChangePasswordForm = (props: Props) => {
     const { retype, password } = input;
 
     if (retype !== "" && password !== "") {
-      if (retype === password) {
-        setError(false);
-        setInput(initialInput);
-        alert("Đổi mật khẩu thành công!");
+      if (retype === password && account) {
+        updateUser({
+          ...account,
+          password: md5(input.password),
+        }).then((res) => {
+          if (res) {
+            setError(false);
+            setInput(initialInput);
+            alert("Đổi mật khẩu thành công!");
+          } else {
+            alert("Đã xảy ra lỗi, vui lòng thử lại!");
+          }
+        });
       } else {
         setError(true);
+        alert("Đã xảy ra lỗi, vui lòng thử lại!");
       }
     }
   };

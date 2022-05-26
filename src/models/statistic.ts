@@ -11,9 +11,10 @@ export interface StatisticValue {
   value: number;
 }
 
-export interface StatisticDevice{
+export interface StatisticDevice {
   total: number;
   amount: number;
   active: number;
   inactive: number;
+  skip?: number;
 }

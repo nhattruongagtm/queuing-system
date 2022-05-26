@@ -102,6 +102,7 @@ export const createDummyData = (amount: number) => {
       username: "nhatturongagtm",
       password: "123456789",
       type: "Kiosk",
+      createdDate: new Date().toISOString().slice(0,10),
     };
     createDevice(device);
   });

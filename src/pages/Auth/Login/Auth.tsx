@@ -21,13 +21,7 @@ const Auth = (props: Props) => {
         <div className="logo">
           <img src="./imgs/logo.svg" alt="" />
         </div>
-        {page === 0 ? (
-          <LoginForm />
-        ) : page === 1 ? (
-          <ChangePassword />
-        ) : (
-          <ChangePasswordForm />
-        )}
+        {page === 0 ? <LoginForm /> : <ChangePassword />}
       </Sider>
       <Content className="login__content">
         {page === 0 ? (

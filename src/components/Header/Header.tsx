@@ -2,11 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { IRoute } from "../../constant/routes";
 import Notification from "../Notification/Notification";
-
+import useUser from "../../hooks/useUser";
 type Props = {};
 
 const Header = (props: Props) => {
   const navigate = useNavigate();
+  const [user] = useUser();
   return (
     <>
       <h3 className="content__header__page">Thông tin cá nhân</h3>
@@ -24,7 +25,7 @@ const Header = (props: Props) => {
           </div>
           <div className="header__user__info">
             <h4 className="greetings">Xin chào</h4>
-            <p>Lê Quỳnh Ái Vân</p>
+            <p>{user?.fullName}</p>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ export enum IRoute {
   SETTINGS = "/cai-dat",
   LOGIN = "/dang-nhap",
   CHANGE_PASSWORD = "/doi-mat-khau",
+  FORGOT_PASSWORD = "/quen-mat-khau",
   INFO = "/thong-tin",
   ADD_DEVICE = "/thiet-bi/them-thiet-bi",
   DEVICE_DETAIL = "/thiet-bi/chi-tiet-thiet-bi",

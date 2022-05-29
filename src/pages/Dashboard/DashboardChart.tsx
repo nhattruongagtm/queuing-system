@@ -1,59 +1,94 @@
 import { Area } from "@ant-design/plots";
+import { Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  getNumberByDay,
+  getNumberByWeek,
+  getNumberByYear,
+} from "../../api/statistic";
+import { ChartData } from "../../models/statistic";
+import { RootState } from "../../store";
 
 type Props = {};
 
+const { Option } = Select;
+
 const DashboardChart = (props: Props) => {
-    const [data, setData] = useState([]);
+  const [data, setData] = useState<ChartData[]>([]);
+  const [type, setType] = useState<number>(0);
+  const date = useSelector((state: RootState) => state.dashboard.date);
 
   useEffect(() => {
-    asyncFetch();
-  }, []);
+    const loadChartData = async () => {
+      if (type === 0) {
+        const data = await getNumberByDay(date.year, date.month);
+        setData(data);
+      } else if (type === 1) {
+        const data = await getNumberByWeek(date.year, date.month);
+        console.log(data)
+        setData(data);
+      } else {
+        const data = await getNumberByYear(date.year);
+        console.log(data.length)
+        setData(data);
+      }
+    };
+    loadChartData()
+  }, [type,date]);
 
-  const asyncFetch = () => {
-    fetch('https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json')
-      .then((response) => response.json())
-      .then((json) => setData((json as []).slice(0,10)))
-      .catch((error) => {
-        console.log('fetch data failed', error);
-      });
-  };
   const config = {
     data,
-    xField: 'Date',
-    yField: 'scales',
+    xField: "date",
+    yField: "value",
     xAxis: {
       range: [0, 1],
-      tickCount: 5,
+      // tickCount: 5,
     },
     areaStyle: () => {
       return {
-        fill: 'l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+        fill: "l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff",
       };
     },
     smooth: true,
+  };
+  const handleChange = (value: string) => {
+    setType(Number(value));
   };
   return (
     <div className="dashboard__chart">
       <div className="dashboard__chart__header">
         <div className="chart__header__title">
           <p>Bảng thống kê theo ngày</p>
-          <p>Tháng 11/2021</p>
+          <p>
+            Tháng {date.month}/{date.year}
+          </p>
         </div>
         <div className="chart__header__date">
           <span>Xem theo</span>
           <div className="chart__date__select">
-            <select name="" id="">
+            {/* <select name="" id="">
               <option value="">Ngày</option>
               <option value="">Tuần</option>
               <option value="">Tháng</option>
-            </select>
-            <i className='bx bxs-down-arrow'></i>
+            </select> */}
+            <Select
+              defaultValue="0"
+              style={{
+                width: 100,
+              }}
+              onChange={handleChange}
+            >
+              <Option value="0">Ngày</Option>
+              <Option value="1">Tuần</Option>
+              <Option value="2">Tháng</Option>
+            </Select>
+            {/* <i className="bx bxs-down-arrow"></i> */}
           </div>
         </div>
       </div>
       <div className="dashboard__chart__main">
-      <Area {...config} />
+        <Area {...config} />
       </div>
     </div>
   );

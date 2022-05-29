@@ -43,6 +43,7 @@ const AddRole = (props: Props) => {
   useEffect(() => {
     const loadRoles = async () => {
       const rs = await getRoleGroup();
+      console.log(rs);
       setRoles(rs);
     };
     loadRoles();

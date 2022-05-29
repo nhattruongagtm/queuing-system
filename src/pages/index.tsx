@@ -26,17 +26,24 @@ import AddAccount from "./Settings/AddAccount";
 import Role from "./Settings/Role";
 import Account from "./Settings/Account";
 import User from "./Settings/User";
+import useUser from "../hooks/useUser";
 
 type Props = {};
 
 const UtilPage = (props: Props) => {
   const { Header, Footer, Sider, Content } = Layout;
+  const [user] = useUser();
   const modalState = useSelector((state: RootState) => state.modal.status);
   const Layer = () => (
     <div
       className={`layer ${modalState !== ModalState.HIDDEN ? "display" : ""}`}
     ></div>
   );
+
+  if (!user) {
+    return <>Please Login!</>;
+  }
+
   return (
     <Layout className="admin">
       <Sider className="sidebar">

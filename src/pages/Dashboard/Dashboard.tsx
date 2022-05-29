@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 import DashboardData from "./DashboardData";
 import DashboardChart from "./DashboardChart";
-import DatePicker from "../../components/DatePicker/DatePicker";
+import DatePicker, { DateTime } from "../../components/DatePicker/DatePicker";
 import { StatisticDevice } from "../../models/statistic";
 import {
   getStatisticsByNumbers,
@@ -10,15 +10,22 @@ import {
   getNumberByMonth,
   getServiceByMonth,
 } from "../../api/statistic";
+import { useDispatch } from "react-redux";
+import { updateDate } from "../../slice/dashboardSlice";
 interface Props {}
 
 const { Content, Sider } = Layout;
 
 const Dashboard = (props: Props) => {
+  const dispatch = useDispatch();
   const [deviceStatistic, setDeviceStatistic] = useState<StatisticDevice>();
   const [seriviceStatistic, setServiceStatistic] = useState<StatisticDevice>();
   const [numberStatistic, setNumberStatistic] = useState<StatisticDevice>();
-
+  const [dateTime,setDateTime] = useState<DateTime>({
+    day: new Date().getDate(),
+    month: new Date().getMonth()+1,
+    year: new Date().getFullYear()
+  });
   useEffect(() => {
     getDevicesByMonth(new Date().getMonth() + 1)
       .then((res) => {
@@ -45,6 +52,10 @@ const Dashboard = (props: Props) => {
         console.log(e);
       });
   }, []);
+  const handleGetDate = (date: DateTime) =>{
+    setDateTime(date);
+    
+  }
   return (
     <Layout className="dashboard">
       <Content className="dashboard__content">
@@ -158,7 +169,7 @@ const Dashboard = (props: Props) => {
               </>
             )}
           </div>
-          <DatePicker />
+          <DatePicker onGetDate={handleGetDate}/>
         </div>
       </Sider>
     </Layout>

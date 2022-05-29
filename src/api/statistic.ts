@@ -1,8 +1,9 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { resolve } from "path/posix";
 import { Device } from "../models/device";
 import { Numbers } from "../models/numbers";
 import { Service } from "../models/services";
-import { Statistic, StatisticDevice } from "../models/statistic";
+import { ChartData, Statistic, StatisticDevice } from "../models/statistic";
 import { DEVICE_DOCS } from "./device";
 import { db } from "./fbConfig";
 import { NUMBERS_DOCS } from "./numbers";
@@ -148,7 +149,7 @@ export const getServiceByMonth = async (
     let lastQ;
     let activeCount = 0;
     let inactiveCount = 0;
-   
+
     const deviceRef = collection(db, SERVICE_DOCS);
     const condition = `${new Date().getFullYear()}-${month}`;
     // q = query(deviceRef, where("createdDate", ">=", condition));
@@ -182,7 +183,7 @@ export const getServiceByMonth = async (
   });
 };
 export const getNumberByMonth = async (
-  month: number,
+  month: number
 ): Promise<StatisticDevice> => {
   return new Promise(async (resolve, reject) => {
     let q;
@@ -223,6 +224,161 @@ export const getNumberByMonth = async (
     } catch (error) {
       reject(error);
       console.log(error);
+    }
+  });
+};
+
+export const getNumbersToday = async (
+  day: number,
+  month: number = new Date().getMonth() + 1,
+  year: number = new Date().getFullYear()
+): Promise<ChartData> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dateString = `${year}-${month}-${day}`;
+      const rs: ChartData = {
+        date: dateString,
+        value: 0,
+      };
+      const userRef = await getDocs(collection(db, NUMBERS_DOCS));
+      let count = 0;
+      userRef.forEach((doc) => {
+        count++;
+        const data = doc.data() as Numbers;
+
+        const createdDate = data.createdDate.split(" ")[0];
+
+        if (rs.date === createdDate) {
+          rs.value++;
+        }
+
+        if (count === userRef.size) {
+          resolve(rs);
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getNumberByDay = async (
+  year: number,
+  month: number
+): Promise<ChartData[]> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let rs: ChartData[] = [];
+      const numberOfMonth = new Date(year, month, 0).getDate();
+      for (let i = 1; i <= numberOfMonth; i++) {
+        const item = await getNumbersToday(i, month, year);
+        rs.push(item);
+      }
+      resolve(rs);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getNumberByWeek = async (
+  year: number,
+  month: number
+): Promise<ChartData[]> => {
+  return new Promise((resolve, reject) => {
+    try {
+      let rs: ChartData[] = [];
+      const numberOfMonth = new Date(year, month, 0).getDate();
+      let count = 0;
+
+      const months = Array.from(new Array(numberOfMonth));
+      for (let i = 0; i < months.length; i++) {
+        months[i] = i + 1;
+      }
+      for (let i = 0; i < 4; i++) {
+        const date = "Tuần " + (i + 1);
+        const item: ChartData = {
+          date,
+          value: 0,
+        };
+        console.log(i)
+        months.slice(count, count + 8).forEach(async (i, index) => {
+          const value = (await getNumbersToday(i, month, year)).value;
+          item.value += value;
+        });
+        rs.push(item);
+        count += 8;
+
+        console.log("w",rs)
+      }
+      resolve(rs);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getNumbersByMonth = (
+  year: number,
+  month: number
+): Promise<ChartData> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dateString = `${year}-${month}`;
+      const numberRef = await getDocs(collection(db, NUMBERS_DOCS));
+      const rs: ChartData = {
+        date: month + "",
+        value: 0,
+      };
+      let count = 0;
+      numberRef.forEach(async (doc) => {
+        count++;
+        const data = doc.data() as Numbers;
+        const createdDate = data.createdDate.split(" ")[0];
+        if (createdDate.indexOf(dateString) !== -1) {
+          const value = await getNumberByDay(year, month);
+          value.forEach((item) => {
+            rs.value += item.value;
+
+            if (count === numberRef.size) {
+              resolve(rs);
+            }
+          });
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getNumberByYear = (year: number): Promise<ChartData[]> => {
+  return new Promise(async (resolve, reject) => {
+    const months = Array.from(new Array(12));
+    for (let i = 0; i < months.length; i++) {
+      months[i] = i + 1;
+    }
+    let count = 0;
+    let rs: ChartData[] = [];
+    for (let i = 0; i < months.length; i++) {
+      count++;
+      const monthValue = await getNumbersByMonth(year, months[i]);
+      const item: ChartData = {
+        date: months[i],
+        value: monthValue.value,
+      };
+      rs.push(item);
+
+      console.log(count, months.length);
+      if (count === months.length) {
+        const sort = rs.sort((a, b) => Number(a.date) - Number(b.date));
+        console.log("rs", sort);
+        resolve(sort);
+      }
+    }
+    try {
+    } catch (error) {
+      reject(error);
     }
   });
 };

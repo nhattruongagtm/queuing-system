@@ -18,3 +18,8 @@ export interface StatisticDevice {
   inactive: number;
   skip?: number;
 }
+
+export interface ChartData{
+  date: string;
+  value: number;
+}

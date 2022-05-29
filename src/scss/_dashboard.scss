@@ -136,19 +136,24 @@
             font-weight: 600;
           }
           .chart__date__select {
-            padding: 10px 12px;
+            // padding: 10px 12px;
             border-radius: 8px;
             color: $gray-text;
             display: flex;
-            gap: 26px;
+            // gap: 26px;
             align-items: center;
-            border: 1px solid $gray-outline;
+            // border: 1px solid $gray-outline;
             select {
               option {
               }
             }
             i {
               color: $orange;
+            }
+            .ant-select-selector {
+              height: 40px;
+              display: flex;
+              align-items: center;
             }
           }
         }

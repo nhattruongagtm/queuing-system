@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { IRoute } from "../../constant/routes";
 import { useNavigate } from "react-router";
+import { ACCESS_TOKEN } from "../../constant/token";
 interface Props {}
 
 interface Sidebar {
@@ -70,7 +71,10 @@ const Sidebar = (props: Props) => {
         </label>
       </ul>
       <div className="sidebar__logout">
-        <button className="btn__logout" onClick={() => navigate(IRoute.HOME)}>
+        <button className="btn__logout" onClick={() => {
+          navigate(IRoute.HOME)
+          localStorage.removeItem(ACCESS_TOKEN)
+        }}>
           <img src="./imgs/logout.svg" alt="" />
           <span>Đăng xuất</span>
         </button>

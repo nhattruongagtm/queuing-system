@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { createDevice, updateDevice } from "../../api/device";
 import { createLog } from "../../api/log";
+import { loadServiceList } from "../../api/service";
 import { Device } from "../../models/device";
 import { Log } from "../../models/log";
+import { Service } from "../../models/services";
 import { createDevice as createDeviceStore } from "../../slice/deviceSlice";
 import { RootState } from "../../store";
 const { Content } = Layout;
@@ -61,7 +63,9 @@ export interface AddDeviceInput {
 const AddDevice = (props: Props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const [options,setOptions] = useState<Service[]>([]);
   const edit = useSelector((state: RootState) => state.devices.edit);
+
   const [input, setInput] = useState<Device>({
     id: "",
     name: "",

@@ -12,6 +12,7 @@ const DashboardData = (props: Props) => {
     getStatisticsByNumbers()
       .then((res) => {
         setLoading(false);
+        console.log(res)
         setStatistic(res);
       })
       .catch((e) => {
